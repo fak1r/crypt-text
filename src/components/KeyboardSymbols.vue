@@ -45,36 +45,24 @@
       </p>
     </div>
   </div>
-  <div class="crypt-sec">
-    <KeyboardToObject
-      v-model:keyboard="encryptKeyboard" 
-      v-model:focusOnInputs="focusOnInput"
-    >
-    </KeyboardToObject>
-    <CryptDecrypt 
-      v-model:keyboard="encryptKeyboard" 
-      v-model:focusOnInputs="focusOnInput"
-    >
-    </CryptDecrypt>
-  </div>
+
 </template>
 
 <script setup>
 
   import { ref, computed } from 'vue';
 
-  import CryptDecrypt from './CryptDecrypt.vue';
-  import KeyboardToObject from './KeyboardToObject.vue';
 
-  const encryptKeyboard = ref({
-    '0': '♨', '1': '✡', '2': '✷', '3': '✥', '4': '▩', '5': '♜', '6': '♛', '7': '△', '8': '▤', '9': '▣', ' ': '%',
-    'A': '▦', 'B': '✪', 'C': '✢', 'D': '✱', 'E': '▪', 'F': '✧', 'G': '✹', 'H': '✺', 'I': '▧', 'J': '▬',
-    'K': '▨', 'L': '✤', 'M': '◩', 'N': '◬', 'O': '◪', 'P': '◭', 'Q': '✦', 'R': '✶', 'S': '✣', 'T': '✯',
-    'U': '▢', 'V': '♚', 'W': '✰', 'X': '□', 'Y': '❅', 'Z': '▻',
-    'a': '◧', 'b': '?', 'c': '▲', 'd': '◫', 'e': '♝', 'f': '◥', 'g': '♬', 'h': '♘', 'i': '♟', 'j': '♧',
-    'k': '♙', 'l': '◯', 'm': '❃', 'n': '◮', 'o': '✸', 'p': '&', 'q': '♣', 'r': '!', 's': '№',
-    't': '✵', 'u': '♞', 'v': '@', 'w': '✽', 'x': '✠', 'y': '✴', 'z': '∐'
-  });
+  import { useSymbolsStore } from 'src/stores/symbolsStore'
+
+  const store = useSymbolsStore();
+
+  const encryptKeyboard = ref(store.getKeyboardByName('encryptKeyboard'));
+
+  // обновление данных при изменении в state Pinia
+  store.$subscribe(() => {   
+    encryptKeyboard.value = store.getKeyboardByName('encryptKeyboard');
+  }, { detached: true })
 
   const symbols = ref({
     '┐': '┐', '└': '└', '┴': '┴', '┌': '┌', '─': '─', '│': '│', '┘': '┘', '├': '├', '┤': '┤', '┬': '┬',
@@ -89,14 +77,13 @@
     // Добавьте или измените символы по вашему желанию
   });
 
-  // замена символов по нажатию мыши
+  // замена символов по клику
 
   let symbolToRemove = ref('');
   let symbolToAdd = ref('');
   let repeatedSymbol = ref('');
   let clickOnChar = false;
   let clickOnSymbol = false;
-  const focusOnInput = ref(false);
   let oldKey = '';
 
   const keyByValue = (symbol, keyboard) => {
@@ -107,7 +94,7 @@
     repeatedSymbol.value = false;
     const key = keyByValue(symbol, keyboard);
 
-    // если нажали на клавиатуру
+    // если кликнули на клавиатуру
     if (key){
       if (key === oldKey || oldKey === '') clickOnChar = !clickOnChar;
       if (key != oldKey && clickOnChar === false) clickOnChar = true;
@@ -144,6 +131,7 @@
       clickOnSymbol = false;
       repeatedSymbol.value = false;
       oldKey = '';
+      store.updateKeyboard(keyboard, 'encryptKeyboard');
     }
   }
 
@@ -174,7 +162,7 @@
 
   document.addEventListener('keydown', (e) => {
     // отслеживаем нажатие только если не вводим данные в инпут
-    if (!focusOnInput.value){
+    if (!store.onInputFlag){
       changeCharactersByKeydown(encryptKeyboard.value, e.key);
     }
   }) 
@@ -200,46 +188,36 @@
       clickOnChar = false;
       clickOnSymbol = false;
       repeatedSymbol.value = false;
-    }
+    }   
   }
 
+  // сохранение новой клавиатуры в store
+
+  const saveKeyboard = (newKeyboard, newKeyboardName) => {
+    store.saveNewKeyboard(newKeyboard, newKeyboardName);
+  }
 </script>
 
 <style lang="sass">
-
 .blue
   background-color: #bae8e8
-
 .yellow
   background-color: #ffd803
-
 .pink
   background-color: #ffc6c7
-
 .h1
   display: block
-  font-size: 2em
-  margin-block-start: 0.67em
-  margin-block-end: 0.67em
-  margin-inline-start: 0px
-  margin-inline-end: 0px
+  font-size: 24px
   font-weight: bold
-  color: #310062
-
-.crypt-sec
-  display: flex
-
+  @media screen and (max-width: 860px) 
+    font-size: 16px
 .newAdd
   color: #ff8082
-
 .newRemove
   color: #3dd2d2
-
 .repeated
   color: #efcc03
-
 .alert
   margin-top: 25px
   height: 40px
-
 </style>
