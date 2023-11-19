@@ -1,9 +1,9 @@
 <template>
-  <div class="container q-pt-md q-pr-md">
+  <div class="container flex-column justify-center q-pt-md">
+    <div class="h1 text-center q-pb-md">Encryption text</div>
+    <div class="q-pb-md">Make sure you enter text using the characters available in the virtual keyboard. By default these are Latin letters and numbers</div>
     <div class="crypt-decrypt" ref="cryptedRef">
       <div class="encrypt">
-        <div class="h1">Original: {{ textToCrypt }}</div>
-
         <q-input
           v-model="textToCrypt"
           color="teal"
@@ -16,8 +16,8 @@
           </template>
         </q-input>
 
-        <div class="q-pt-md">
-          <div class="q-gutter-sm">
+        <div class="q-py-md flex">
+          <div class="q-pb-md q-pr-md">
             <q-btn
               @click="cryptoPass"
               class="btn-crypt"
@@ -26,13 +26,22 @@
             />
           </div>
           <div class="copy-tooltip">
-            <q-tooltip v-model="showTooltip">Copied!</q-tooltip>
+            <q-tooltip anchor="top middle" self="bottom middle" :offset="[0, 5]" v-model="showTooltip">Copied!</q-tooltip>
+          </div>
+
+          <div>
+            <q-btn
+              class="btn-crypt"
+              label="Show result"
+              :disabled="!cryptedText"
+            />
+              <q-popup-proxy transition-show="flip-up" transition-hide="flip-down">
+                <q-banner class="show-result q-ml-sm">
+                  <div class="h2">{{ cryptedText }}</div>
+                </q-banner>
+              </q-popup-proxy>
           </div>
         </div>    
-
-        <div>
-          <p class="h1">Encrypted: {{ cryptedText }}</p>
-        </div>
       </div>
 
       <div class="decrypt">
@@ -47,15 +56,17 @@
             <svg fill="#AAA" xmlns="http://www.w3.org/2000/svg" height="30" viewBox="0 -960 960 960" width="30"><path d="M420-360h120l-23-129q20-10 31.5-29t11.5-42q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 23 11.5 42t31.5 29l-23 129Zm60 280q-139-35-229.5-159.5T160-516v-244l320-120 320 120v244q0 152-90.5 276.5T480-80Zm0-84q104-33 172-132t68-220v-189l-240-90-240 90v189q0 121 68 220t172 132Zm0-316Z"/></svg>
           </template>
         </q-input>
-        <div class="q-pt-md">
-          <q-btn
+        <div class="q-py-md flex items-center">
+          <div class="q-pr-md q-pb-md">
+            <q-btn
             @click="decryptPass"
             class="btn-crypt"
             label="Decrypt"
             :disabled="!textToDecrypt"
-          />
+            />
+          </div>
+          <div class="q-pb-md" v-if="decryptedText">Decrypted: {{ decryptedText }}</div>
         </div>
-        <div class="h1">Decrypted: {{ decryptedText }}</div>
       </div>
     </div>
   </div>
@@ -111,6 +122,7 @@
     copy(cryptedText.value);
   }
 
+  // вызов tooltip copied!
   watch(copied, copiedUpdate => {
     if (copiedUpdate){
       showTooltip.value = true;
@@ -135,6 +147,15 @@
 </script>
 
 <style lang="sass">
+@media (max-width: 360px)
+  .q-pl-md
+    padding-left: 12px
+.container
+  padding: 0 20%
+  @media screen and (max-width: 1550px) 
+    padding: 0 10%
+  @media screen and (max-width: 1250px) 
+    padding: 0 0
 .input-pass 
   display: flex
   align-items: center
@@ -149,6 +170,8 @@
   padding: 5px
   outline: none
 .btn-crypt 
+  height: 40px
+  padding: 5px 10px
   background-color: #ff8e3c 
   color: #0d0d0d 
   font-weight: bold
@@ -158,6 +181,8 @@
   padding: 10px 20px
   cursor: pointer
   transition: background-color 0.3s ease 
+  @media (max-width: 360px)
+    padding: 2px 4px
 .btn-crypt:hover 
   background-color: #d9376e 
 .btn-crypt:active 
@@ -166,7 +191,12 @@
   background-color: #ccc 
   cursor: not-allowed
 .copy-tooltip
-  width: 150px
+  position: relative
+  right: 77px
 .q-tooltip
-  background-color: #67568c
+  background-color: #f3bd96
+  color: black
+.show-result
+  background-color: #babdc8
+  color: black
 </style>

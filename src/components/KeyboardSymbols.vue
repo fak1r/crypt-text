@@ -1,25 +1,50 @@
 <template>
-  <div class="keyboard">
+  <div class="keyboard flex-column justify-center">
     <table class="keyboard-table">
       <tr>
         <td colspan="26">
-          <h1 class="h1">Encrypted Keyboard:</h1>
+          <div class="h1 text-center">Encryption key builder</div>
         </td>
       </tr>
-      <tr v-for="(cryptRow, index) in keyboardRows" :key="index">
+      <tr>
+        <td colspan="26">
+          <div class="q-py-md">
+            You can change, export and import secret key by click on the icon in the upper right corner
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="26">
+          <div class="h2">Keyboard:</div>
+        </td>
+      </tr>
+      <tr v-for="(cryptRow, index) in keyboardRows" :key="index" ref="keyboard">
         <td
           v-for="(cryptChar, key) in cryptRow"
           :key="key"
           @click="chooseSymbolsToChange(cryptChar, encryptKeyboard)"
           :class="{ yellow: symbolToRemove === cryptChar, pink: symbolToRemove !== cryptChar }"
         >
-          <div class="h1">{{ key }}:</div>
-          <div class="h1">{{ cryptChar }}</div>
+          <div class="h2">{{ key }}:</div>
+          <div class="h2">{{ cryptChar }}</div>
         </td>
       </tr>
       <tr>
-        <td colspan="26">
-          <div class="h1">Special symbols:</div>
+        <td colspan="4">
+          <div class="h2">Symbols:</div>
+        </td>
+        <td colspan="22">
+          <div class="alert">
+            <div class="h2 repeated" v-if="repeatedSymbol">
+              This symbol already in keyboard
+            </div>
+            <div class="h2 newRemove" v-if="symbolToRemove && !repeatedSymbol">
+              Choose new special symbol
+            </div>
+            <div class="h2 newAdd" v-if="symbolToAdd && !repeatedSymbol">
+              Choose symbol to change
+            </div>
+          </div>
         </td>
       </tr>
       <tr v-for="(symbolsRow, index) in symbolsRows" :key="index">
@@ -29,21 +54,11 @@
           @click="chooseSymbolsToChange(symbol, encryptKeyboard, true)"
           :class="{ yellow: symbolToAdd === symbol, blue: symbolToAdd !== symbol }"
         >
-          <div class="h1">{{ symbol }}</div>
+          <div class="h2">{{ symbol }}</div>
         </td>
       </tr>
     </table>
-    <div class="alert">
-      <p class="h1 repeated" v-if="repeatedSymbol">
-        This symbol already in keyboard
-      </p>
-      <p class="h1 newRemove" v-if="symbolToRemove && !repeatedSymbol">
-        Choose new special symbol
-      </p>
-      <p class="h1 newAdd" v-if="symbolToAdd && !repeatedSymbol">
-        Choose symbol to change
-      </p>
-    </div>
+
   </div>
 
 </template>
@@ -51,8 +66,6 @@
 <script setup>
 
   import { ref, computed } from 'vue';
-
-
   import { useSymbolsStore } from 'src/stores/symbolsStore'
 
   const store = useSymbolsStore();
@@ -64,21 +77,9 @@
     encryptKeyboard.value = store.getKeyboardByName('encryptKeyboard');
   }, { detached: true })
 
-  const symbols = ref({
-    '┐': '┐', '└': '└', '┴': '┴', '┌': '┌', '─': '─', '│': '│', '┘': '┘', '├': '├', '┤': '┤', '┬': '┬',
-    '▒': '▒', '▓': '▓', '█': '█', '░': '░', '▀': '▀', '▄': '▄', '■': '■', '□': '□', '▲': '▲', '▼': '▼',
-    '◆': '◆', '○': '○', '●': '●', '◐': '◐', '◑': '◑', '◒': '◒', '◓': '◓', '◔': '◔', '◕': '◕', '⌂': '⌂',
-    '★': '★', '☆': '☆', '✪': '✪', '✽': '✽', '✦': '✦', '✯': '✯', '✰': '✰', '✶': '✶', '✷': '✷', '✵': '✵',
-    '✹': '✹', '✺': '✺', '✸': '✸', '✻': '✻', '✠': '✠', '✡': '✡', '✢': '✢', '✣': '✣', '✤': '✤', '✥': '✥',
-    '⚙': '⚙', '⚚': '⚚', '⚛': '⚛', '⚜': '⚜', '⚝': '⚝', '⚞': '⚞', '⚟': '⚟', '⚠': '⚠', 'œ': 'œ', '⚢': '⚢',
-    '⚣': '⚣', '⚤': '⚤', '⚥': '⚥', '⚦': '⚦', '⚧': '⚧', '⚨': '⚨', '⚩': '⚩', 'Š': 'Š', 'Œ': 'Œ', '⚬': '⚬',
-    '⚭': '⚭', '⚮': '⚮', '⚯': '⚯', '⚰': '⚰', '⚱': '⚱', '⚲': '⚲', '⚳': '⚳', '⚴': '⚴', '⚵': '⚵', '⚶': '⚶',
-    '⚷': '⚷', '⚸': '⚸', '⚹': '⚹', '⚺': '⚺', '⚻': '⚻', '⚼': '⚼', '‡': '‡', '‰': '‰', '⚿': '⚿',
-    // Добавьте или измените символы по вашему желанию
-  });
+  const symbols = ref(store.getKeyboardByName('symbols'));
 
   // замена символов по клику
-
   let symbolToRemove = ref('');
   let symbolToAdd = ref('');
   let repeatedSymbol = ref('');
@@ -135,7 +136,7 @@
     }
   }
 
-  // Вывод клавиатуры в шаблон в три строки: цифры, заглавные, строчные
+  // Вывод в шаблон построчно
   const divideObjectIntoRows = (inputObject, delimiterSymbols) => {
     const rows = [];
     const objectLength = Object.keys(inputObject).length;
@@ -155,39 +156,58 @@
     return rows;
   };
 
-  const keyboardRows = computed(() => divideObjectIntoRows(encryptKeyboard.value, [' ', 'Z']));
-  const symbolsRows = computed(() => divideObjectIntoRows(symbols.value, ['◒', '⚚', '⚴']));
+  const keyboardRows = computed(() => {
+    let keys = [' ', 'Z'];
+    if (window.innerWidth <= 670) {
+      keys = ['E', 'U', 'k'];
+    }
+    else {
+      keys = [' ', 'Z']
+    };
+    return divideObjectIntoRows(encryptKeyboard.value, keys)
+  });
+
+  const symbolsRows = computed(() => {
+    let keys = ['◒', '⚚', '⚴'];
+    if (window.innerWidth <= 670) {
+      keys = ['▄', '☆', '✣', '⚦', '⚶'];
+    }
+    else {
+      keys = ['◒', '⚚', '⚴'];
+    }
+    return divideObjectIntoRows(symbols.value, keys)
+  });
 
   // отслеживание нажатий на клавиатуре, для быстрой замены символов
-
-  document.addEventListener('keydown', (e) => {
+  document.addEventListener('keydown', (event) => {
     // отслеживаем нажатие только если не вводим данные в инпут
     if (!store.onInputFlag){
-      changeCharactersByKeydown(encryptKeyboard.value, e.key);
+      changeCharactersByKeydown(encryptKeyboard.value, event);
     }
   }) 
 
-  const changeCharactersByKeydown = (keyboard, key) => {
-    if (keyboard[key]){
-      if (key === oldKey || oldKey === '') clickOnChar = !clickOnChar;
-      if (key != oldKey && clickOnChar === false) clickOnChar = true;
-      oldKey = key;
-      symbolToRemove.value = keyboard[key];
+  const changeCharactersByKeydown = (keyboard, event) => {
+    if (keyboard[event.key] && event.ctrlKey === false){
+      if (event.key === oldKey || oldKey === '') clickOnChar = !clickOnChar;
+      if (event.key != oldKey && clickOnChar === false) clickOnChar = true;
+      oldKey = event.key;
+      symbolToRemove.value = keyboard[event.key];
       if (!clickOnChar) symbolToRemove.value = '';
     }
-    if (key === 'Escape'){
+    if (event.key === 'Escape'){
       symbolToRemove.value = '';
       symbolToAdd.value = '';
     }
     if (symbolToAdd.value){
       const keyNew = keyByValue(symbolToRemove.value, keyboard);  
-      keyboard[keyNew] = symbolToAdd.value;
-
-      symbolToRemove.value = '';
-      symbolToAdd.value = '';
-      clickOnChar = false;
-      clickOnSymbol = false;
-      repeatedSymbol.value = false;
+      if (keyNew){
+        keyboard[keyNew] = symbolToAdd.value;
+        symbolToRemove.value = '';
+        symbolToAdd.value = '';
+        clickOnChar = false;
+        clickOnSymbol = false;
+        repeatedSymbol.value = false;
+      }
     }   
   }
 
@@ -199,18 +219,19 @@
 </script>
 
 <style lang="sass">
+.keyboard
+  padding: 0 20%
+  @media screen and (max-width: 1550px) 
+    padding: 0 10%
+  @media screen and (max-width: 1250px) 
+    padding: 0 0
 .blue
   background-color: #bae8e8
 .yellow
   background-color: #ffd803
 .pink
   background-color: #ffc6c7
-.h1
-  display: block
-  font-size: 24px
-  font-weight: bold
-  @media screen and (max-width: 860px) 
-    font-size: 16px
+
 .newAdd
   color: #ff8082
 .newRemove
@@ -218,6 +239,5 @@
 .repeated
   color: #efcc03
 .alert
-  margin-top: 25px
-  height: 40px
+  text-align: right
 </style>

@@ -9,6 +9,7 @@
     "test": "echo \"No test specified\" && exit 0",
     "dev": "quasar dev",
     "build": "quasar build",
+    "deploy": "gh-pages -d dist",
     "icons": "icongenie generate -i secret-icon.png --theme-color 000000 --skip-trim"
   },
   "dependencies": {
@@ -22,6 +23,7 @@
   "devDependencies": {
     "@quasar/app-vite": "^1.3.0",
     "autoprefixer": "^10.4.2",
+    "gh-pages": "^6.1.0",
     "postcss": "^8.4.14"
   },
   "engines": {

@@ -1,6 +1,8 @@
-# Crypt-pass (crypt-pass)
+# CrypText 
 
-Crypt-project
+## This app help you to build secret key and encrypt text information. It can be useful for creating new passwords or encrypted messages
+
+## [Live demo - https://fak1r.github.io/crypt-text](https://fak1r.github.io/crypt-text)
 
 ## Install the dependencies
 ```bash
@@ -19,6 +21,3 @@ quasar dev
 ```bash
 quasar build
 ```
-
-### Customize the configuration
-See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-config-js).
