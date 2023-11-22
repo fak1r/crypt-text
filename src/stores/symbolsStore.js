@@ -30,7 +30,8 @@ export const useSymbolsStore = defineStore('symbolsStore', {
         }
       }
     ],
-    onInputFlag: false
+    onInputFlag: false,
+    lang: 'en-US'
   }),
 
   getters: {

@@ -13,6 +13,26 @@
         <q-toolbar-title>
           CrypText
         </q-toolbar-title>
+        <q-fab
+          direction="down"
+          padding="10px"
+          unelevated
+          class="lang-icon q-pr-sm"
+          flip-horizontal
+        >
+        <template v-slot:icon="{ opened }">
+          <q-icon
+            size="40px"
+            class="absolute-center"
+            :class="{ 'example-fab-animate--hover': opened !== true }"
+            name="language"
+          />
+        </template>
+          <div class="q-pr-sm">
+            <q-fab-action color="primary" text-color="white" @click="lang = 'en-US'" label="ENG" />
+            <q-fab-action color="primary" text-color="white" @click="lang = 'ru-RU'" label="RUS" />
+          </div>
+        </q-fab>
         <svg
           @click="open('right')"
           class="secret-icon"
@@ -60,11 +80,15 @@
 
 <script setup>
   
-  import { ref } from 'vue'
+  import { ref, watch, onMounted, onUnmounted } from 'vue'
   import KeyboardSymbols from 'src/components/KeyboardSymbols.vue';
   import KeyboardTextarea from 'src/components/KeyboardTextarea.vue';
   import CryptDecrypt from 'src/components/CryptDecrypt.vue';
+  import { useQuasar } from 'quasar'
+  import languages from 'src/lang/index'
+  import { useSymbolsStore } from 'src/stores/symbolsStore'
 
+  const store = useSymbolsStore();
   const leftDrawerOpen = ref(false);
 
   const toggleLeftDrawer = () => {
@@ -78,9 +102,35 @@
     position.value = pos
     dialog.value = true
   }
+
+  // переключение языка
+  let lang = ref(languages['en-US']);
+
+  const $q = useQuasar();
+
+  if ($q.lang.getLocale() === 'ru-RU'){
+    lang.value = languages['ru-RU'];
+  }
+
+  store.lang = lang.value;
+
+  watch(lang, (newLang) => {
+    if (newLang === 'ru-RU'){
+      lang.value = languages['ru-RU'];
+      store.lang = lang.value;
+    } else if (newLang === 'en-US'){
+      lang.value = languages['en-US'];
+      store.lang = lang.value;
+    }
+  })
+
+
+  
 </script>
 
 <style lang="sass">
+body
+  background-color: #eff0f3
 .h1
   font-size: 28px
   font-weight: bold
@@ -113,6 +163,20 @@
     font-size: 10px
 .left-menu, .right-menu
   background-color: #dcd9e1
-.secret-icon:hover
-  fill: #dcd9e1
+.secret-icon
+  cursor: pointer
+  &:hover
+    fill: #dcd9e1
+  &:active
+    fill: #afa9b8
+.lang-icon
+  &:hover
+    color: #dcd9e1
+  &:active
+    color: #afa9b8
+.q-btn--fab
+  .q-ripple 
+    display: none
+.q-focus-helper
+  display: none
 </style>

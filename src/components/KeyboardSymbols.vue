@@ -3,19 +3,19 @@
     <table class="keyboard-table">
       <tr>
         <td colspan="26">
-          <div class="h1 text-center">Encryption key builder</div>
+          <div class="h1 text-center">{{ store.lang.builderTitle }}</div>
         </td>
       </tr>
       <tr>
         <td colspan="26">
           <div class="q-py-md">
-            You can change, export and import secret key by click on the icon in the upper right corner
+            {{ store.lang.builderText }}
           </div>
         </td>
       </tr>
       <tr>
         <td colspan="26">
-          <div class="h2">Keyboard:</div>
+          <div class="h2">{{ store.lang.builderKeyboard }}</div>
         </td>
       </tr>
       <tr v-for="(cryptRow, index) in keyboardRows" :key="index" ref="keyboard">
@@ -30,19 +30,19 @@
         </td>
       </tr>
       <tr>
-        <td colspan="4">
-          <div class="h2">Symbols:</div>
+        <td colspan="5">
+          <div class="h2">{{ store.lang.builderSymbols }}</div>
         </td>
-        <td colspan="22">
+        <td colspan="21">
           <div class="alert">
             <div class="h2 repeated" v-if="repeatedSymbol">
-              This symbol already in keyboard
+              {{ store.lang.builderChooseWarning }}
             </div>
             <div class="h2 newRemove" v-if="symbolToRemove && !repeatedSymbol">
-              Choose new special symbol
+              {{ store.lang.builderChooseNewSymbol }}
             </div>
             <div class="h2 newAdd" v-if="symbolToAdd && !repeatedSymbol">
-              Choose symbol to change
+              {{ store.lang.builderChooseOldSymbol }}
             </div>
           </div>
         </td>
@@ -58,9 +58,7 @@
         </td>
       </tr>
     </table>
-
   </div>
-
 </template>
 
 <script setup>
@@ -231,7 +229,8 @@
   background-color: #ffd803
 .pink
   background-color: #ffc6c7
-
+.keyboard-table
+  width: 100%
 .newAdd
   color: #ff8082
 .newRemove

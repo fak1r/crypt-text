@@ -65,5 +65,5 @@
 <style lang="sass">
 .q-textarea .q-field__native, .q-textarea .q-field__prefix, .q-textarea .q-field__suffix
   line-height: 1.5
-  font-size: 26px
+  font-size: 24px
 </style>

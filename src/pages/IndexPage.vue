@@ -15,7 +15,6 @@
 </script>
 
 <style lang="sass">
-body
-  background-color: #eff0f3
+
 
 </style>
