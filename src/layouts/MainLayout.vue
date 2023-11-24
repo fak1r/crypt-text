@@ -80,7 +80,7 @@
 
 <script setup>
   
-  import { ref, watch, onMounted, onUnmounted } from 'vue'
+  import { ref, watch } from 'vue'
   import KeyboardSymbols from 'src/components/KeyboardSymbols.vue';
   import KeyboardTextarea from 'src/components/KeyboardTextarea.vue';
   import CryptDecrypt from 'src/components/CryptDecrypt.vue';
@@ -131,6 +131,19 @@
 <style lang="sass">
 body
   background-color: #eff0f3
+.parent-container
+  width: 100%
+  display: flex
+  justify-content: center
+.child-container
+  width: 950px
+@media screen and (max-width: 420px) 
+  .q-toolbar
+    padding: 0 10px
+  .q-pa-md 
+    padding: 10px 10px
+  .q-pr-sm 
+    padding: 0 2px
 .h1
   font-size: 28px
   font-weight: bold
@@ -139,27 +152,32 @@ body
 .h2
   font-size: 24px
   font-weight: bold
-  @media screen and (max-width: 850px) 
+
+  @media screen and (max-width: 1000px) 
+    font-size: 22px
+  @media screen and (max-width: 475px) 
+    font-size: 21px
+  @media screen and (max-width: 455px) 
     font-size: 20px
-  @media screen and (max-width: 425px) 
+  @media screen and (max-width: 430px) 
+    font-size: 20px
+  @media screen and (max-width: 410px) 
     font-size: 19px
   @media screen and (max-width: 400px) 
     font-size: 18px
   @media screen and (max-width: 380px) 
     font-size: 17px
-  @media screen and (max-width: 370px) 
+  @media screen and (max-width: 365px) 
     font-size: 16px
-  @media screen and (max-width: 360px) 
+  @media screen and (max-width: 345px) 
     font-size: 15px
-  @media screen and (max-width: 350px) 
+  @media screen and (max-width: 330px) 
     font-size: 14px
-  @media screen and (max-width: 320px) 
-    font-size: 13px
   @media screen and (max-width: 310px) 
-    font-size: 12px
+    font-size: 13px
   @media screen and (max-width: 300px) 
-    font-size: 11px
-  @media screen and (max-width: 270px) 
+    font-size: 12px
+  @media screen and (max-width: 265px) 
     font-size: 10px
 .left-menu, .right-menu
   background-color: #dcd9e1
@@ -179,4 +197,5 @@ body
     display: none
 .q-focus-helper
   display: none
+
 </style>

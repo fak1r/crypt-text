@@ -1,83 +1,87 @@
 <template>
-  <div class="keyboard flex-column justify-center">
-    <table class="keyboard-table">
-      <tr>
-        <td colspan="26">
-          <div class="h1 text-center">{{ store.lang.builderTitle }}</div>
-        </td>
-      </tr>
-      <tr>
-        <td colspan="26">
-          <div class="q-py-md">
-            {{ store.lang.builderText }}
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <td colspan="26">
-          <div class="h2">{{ store.lang.builderKeyboard }}</div>
-        </td>
-      </tr>
-      <tr v-for="(cryptRow, index) in keyboardRows" :key="index" ref="keyboard">
-        <td
-          v-for="(cryptChar, key) in cryptRow"
-          :key="key"
-          @click="chooseSymbolsToChange(cryptChar, encryptKeyboard)"
-          :class="{ yellow: symbolToRemove === cryptChar, pink: symbolToRemove !== cryptChar }"
+  <div class="parent-container">
+    <div class="child-container">
+      <div class="h1 text-center">{{ store.lang.builderTitle }}</div>
+      <div class="q-py-md">
+        {{ store.lang.builderText }}
+      </div>
+      <table>
+        <tr>
+          <td colspan="16">
+            <div class="h2">{{ store.lang.builderKeyboard }}</div>
+          </td>
+        </tr>
+        <tr
+          v-for="(item, index) in chunkedKeyValuePairs(encryptKeyboard, symbolsInRow)"
+          :key="index"
+          class="text-center"
         >
-          <div class="h2">{{ key }}:</div>
-          <div class="h2">{{ cryptChar }}</div>
-        </td>
-      </tr>
-      <tr>
-        <td colspan="5">
-          <div class="h2">{{ store.lang.builderSymbols }}</div>
-        </td>
-        <td colspan="21">
-          <div class="alert">
-            <div class="h2 repeated" v-if="repeatedSymbol">
-              {{ store.lang.builderChooseWarning }}
+          <td
+            v-for="(value, key) in item"
+            :key="key"
+            class="h2"
+            @click="chooseSymbolsToChange(value, encryptKeyboard)"
+            :class="{ yellow: symbolToRemove === value, pink: symbolToRemove !== value }"
+          >
+            <div class="no-wrap">{{ key }}:</div>
+            <div class="no-wrap">{{ value }}</div> 
+          </td>
+        </tr>
+        <tr>
+          <td colspan="4">
+            <div class="h2">{{ store.lang.builderSymbols }}</div>
+          </td>
+          <td colspan="30">
+            <div class="alert">
+              <div class="h2 repeated" v-if="repeatedSymbol">
+                {{ store.lang.builderChooseWarning }}
+              </div>
+              <div class="h2 newRemove" v-if="symbolToRemove && !repeatedSymbol">
+                {{ store.lang.builderChooseNewSymbol }}
+              </div>
+              <div class="h2 newAdd" v-if="symbolToAdd && !repeatedSymbol">
+                {{ store.lang.builderChooseOldSymbol }}
+              </div>
             </div>
-            <div class="h2 newRemove" v-if="symbolToRemove && !repeatedSymbol">
-              {{ store.lang.builderChooseNewSymbol }}
-            </div>
-            <div class="h2 newAdd" v-if="symbolToAdd && !repeatedSymbol">
-              {{ store.lang.builderChooseOldSymbol }}
-            </div>
-          </div>
-        </td>
-      </tr>
-      <tr v-for="(symbolsRow, index) in symbolsRows" :key="index">
-        <td
-          v-for="(symbol, key) in symbolsRow"
-          :key="key"
-          @click="chooseSymbolsToChange(symbol, encryptKeyboard, true)"
-          :class="{ yellow: symbolToAdd === symbol, blue: symbolToAdd !== symbol }"
+          </td>
+        </tr>
+        <tr
+          v-for="(item, index) in chunkedKeyValuePairs(symbols, symbolsInRow)"
+          :key="index"
+          class="text-center"
         >
-          <div class="h2">{{ symbol }}</div>
-        </td>
-      </tr>
-    </table>
+          <td
+            v-for="(symbol, key) in item"
+            :key="key"
+            class="h2"
+            @click="chooseSymbolsToChange(symbol, encryptKeyboard)"
+            :class="{ yellow: symbolToAdd === symbol, blue: symbolToAdd !== symbol }"
+          >
+            {{ symbol }}
+          </td>
+        </tr>
+      </table>
+    </div>
   </div>
 </template>
 
 <script setup>
 
-  import { ref, computed } from 'vue';
+  import { ref, onMounted } from 'vue';
   import { useSymbolsStore } from 'src/stores/symbolsStore'
 
   const store = useSymbolsStore();
 
   const encryptKeyboard = ref(store.getKeyboardByName('encryptKeyboard'));
 
-  // обновление данных при изменении в state Pinia
+  // Обновление данных при изменении в state Pinia
   store.$subscribe(() => {   
     encryptKeyboard.value = store.getKeyboardByName('encryptKeyboard');
   }, { detached: true })
 
   const symbols = ref(store.getKeyboardByName('symbols'));
 
-  // замена символов по клику
+  // Замена символов по клику
   let symbolToRemove = ref('');
   let symbolToAdd = ref('');
   let repeatedSymbol = ref('');
@@ -93,7 +97,7 @@
     repeatedSymbol.value = false;
     const key = keyByValue(symbol, keyboard);
 
-    // если кликнули на клавиатуру
+    // Если кликнули на клавиатуру
     if (key){
       if (key === oldKey || oldKey === '') clickOnChar = !clickOnChar;
       if (key != oldKey && clickOnChar === false) clickOnChar = true;
@@ -111,7 +115,7 @@
       if (!clickOnSymbol) symbolToAdd.value = '';    
     }
 
-    // проверка на наличие повторов
+    // Проверка на наличие повторов
     if (clickOnSymbols && Object.values(keyboard).find(el => el === symbol) && 
     Object.values(symbols.value).find(el => el === symbol)){
       if (!clickOnChar || !clickOnSymbol) repeatedSymbol.value = false;
@@ -135,50 +139,43 @@
   }
 
   // Вывод в шаблон построчно
-  const divideObjectIntoRows = (inputObject, delimiterSymbols) => {
-    const rows = [];
-    const objectLength = Object.keys(inputObject).length;
-    let currentRow = {};
-    let i = 0;
-
-    for (const key in inputObject) {
-      i++;
-      const value = inputObject[key];
-      currentRow[key] = value;
-
-      if (delimiterSymbols.includes(key) || i >= objectLength) {
-        rows.push({ ...currentRow });
-        currentRow = {};
+  const chunkedKeyValuePairs = (inputObject, chunkSize) => {
+    // Преобразование объекта в массив для удобства обработки
+    const arrayFromObject = Object.entries(inputObject);
+    
+    // Разделение массива данных на подмассивы заданного размера
+    return arrayFromObject.reduce((resultArray, [key, value], index) => {
+      const chunkIndex = Math.floor(index / chunkSize);
+      if (!resultArray[chunkIndex]) {
+        resultArray[chunkIndex] = {}; // Начало нового подмассива
       }
-    }
-    return rows;
-  };
 
-  const keyboardRows = computed(() => {
-    let keys = [' ', 'Z'];
-    if (window.innerWidth <= 670) {
-      keys = ['E', 'U', 'k'];
-    }
-    else {
-      keys = [' ', 'Z']
-    };
-    return divideObjectIntoRows(encryptKeyboard.value, keys)
-  });
+      resultArray[chunkIndex][key] = value;
+      return resultArray;
+    }, []);
+  }
 
-  const symbolsRows = computed(() => {
-    let keys = ['◒', '⚚', '⚴'];
-    if (window.innerWidth <= 670) {
-      keys = ['▄', '☆', '✣', '⚦', '⚶'];
-    }
-    else {
-      keys = ['◒', '⚚', '⚴'];
-    }
-    return divideObjectIntoRows(symbols.value, keys)
-  });
+  let symbolsInRow = ref(16);
+  let containerWidth = 0;
 
-  // отслеживание нажатий на клавиатуре, для быстрой замены символов
+  const symbolsInRowCounter = () => {
+    // Высчитываем количество символов на строке, прибавляя 2 символа каждые 54px. Максимум 34, минимум 16.
+    symbolsInRow.value = Math.min(34, 16 + Math.floor((Math.max(containerWidth, 450) - 450) / 54) * 2);
+  }
+
+  onMounted(() => {
+    containerWidth = document.querySelector('.parent-container').offsetWidth
+    symbolsInRowCounter();
+  })
+
+  window.addEventListener('resize', () => {
+    containerWidth = document.querySelector('.parent-container').offsetWidth
+    symbolsInRowCounter();
+  })
+
+  // Отслеживание нажатий на клавиатуре, для быстрой замены символов
   document.addEventListener('keydown', (event) => {
-    // отслеживаем нажатие только если не вводим данные в инпут
+    // Отслеживаем нажатие только если не вводим данные в инпут
     if (!store.onInputFlag){
       changeCharactersByKeydown(encryptKeyboard.value, event);
     }
@@ -209,7 +206,7 @@
     }   
   }
 
-  // сохранение новой клавиатуры в store
+  // Сохранение новой клавиатуры в store
 
   const saveKeyboard = (newKeyboard, newKeyboardName) => {
     store.saveNewKeyboard(newKeyboard, newKeyboardName);
@@ -217,12 +214,6 @@
 </script>
 
 <style lang="sass">
-.keyboard
-  padding: 0 20%
-  @media screen and (max-width: 1550px) 
-    padding: 0 10%
-  @media screen and (max-width: 1250px) 
-    padding: 0 0
 .blue
   background-color: #bae8e8
 .yellow
