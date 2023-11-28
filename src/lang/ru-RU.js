@@ -1,7 +1,9 @@
 export default {
+  lang: 'Русский',
+  
   // CryptDecrypt.vue
   cryptTitle: 'Шифрование текста',
-  cryptText: 'Обязательно вводите текст, используя клавиши, содержащиеся в секретном ключе. По умолчанию это Латинский буквы и цифры.',
+  cryptText: 'Обязательно вводите текст, используя клавиши, содержащиеся в секретном ключе.',
 
   btnCrypt: 'Шифровать и Копировать',
   btnDecrypt: 'Дешифровать',
@@ -11,6 +13,8 @@ export default {
   copyTooltip: 'Скопировано!',
   popupCryptTitle: 'Зашифрованный текст',
   popupDecryptTitle: 'Дешифрованный текст',
+  placeholderCrypt: 'текст для шифрования',
+  placeholderDecrypt: 'секретный код',
 
   // KeyboardSymbols.vue
   builderTitle: 'Конструктор ключей шифрования',
@@ -19,5 +23,9 @@ export default {
   builderSymbols: 'Символы:',
   builderChooseWarning: 'Повторный символ',
   builderChooseNewSymbol: 'Выберите новый символ',
-  builderChooseOldSymbol: 'Выберите символ для замены'
+  builderChooseOldSymbol: 'Выберите символ для замены',
+
+  //LangLayoutSelector.vue
+  langSelectorLable: 'Язык клавиатуры',
+  langSelectorKeys: ['Английский', 'Русский']
 }

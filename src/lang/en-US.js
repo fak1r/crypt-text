@@ -1,7 +1,9 @@
 export default {
+  lang: 'English',
+  
   // CryptDecrypt.vue
   cryptTitle: 'Encryption text',
-  cryptText: 'Be sure to enter text using the keys contained in the secret key. By default these are Latin letters and numbers',
+  cryptText: 'Be sure to enter text using the keys contained in the secret key.',
 
   btnCrypt: 'Encrypt & Copy',
   btnDecrypt: 'Decrypt',
@@ -11,6 +13,8 @@ export default {
   copyTooltip: 'Copied!',
   popupCryptTitle: 'Encrypted text',
   popupDecryptTitle: 'Decrypted text',
+  placeholderCrypt: 'text to encrypt',
+  placeholderDecrypt: 'secret code',
 
   // KeyboardSymbols.vue
   builderTitle: 'Encryption key builder',
@@ -19,6 +23,10 @@ export default {
   builderSymbols: 'Symbols:',
   builderChooseWarning: 'Repeated symbol',
   builderChooseNewSymbol: 'Choose symbol to add',
-  builderChooseOldSymbol: 'Choose symbol to remove'
+  builderChooseOldSymbol: 'Choose symbol to remove',
+
+  //LangLayoutSelector.vue
+  langSelectorLable: 'Keyboard language',
+  langSelectorKeys: ['English', 'Russian']
 
 }

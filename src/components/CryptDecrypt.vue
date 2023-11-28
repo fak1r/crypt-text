@@ -3,12 +3,13 @@
     <div class="child-container">
       <div class="h1 text-center q-pb-md">{{ store.lang.cryptTitle }}</div>
       <div class="q-pb-md">{{ store.lang.cryptText }}</div>
+      <lang-layout-select></lang-layout-select>
       <div class="crypt-decrypt" ref="cryptedRef">
         <div class="encrypt">
           <q-input
             v-model="textToCrypt"
             color="teal"
-            placeholder="text to encrypt"
+            :placeholder="store.lang.placeholderCrypt"
             outlined
             type="text"
           >
@@ -83,7 +84,7 @@
           <q-input
             v-model="textToDecrypt"
             color="teal"
-            placeholder="secret code"
+            :placeholder="store.lang.placeholderDecrypt"
             outlined
             type="text"
           >
@@ -167,6 +168,7 @@
   import { ref, watch } from 'vue';
   import { useSymbolsStore } from 'src/stores/symbolsStore';
   import { useClipboard, useFocusWithin } from '@vueuse/core';
+  import LangLayoutSelect from './LangLayoutSelect.vue';
 
   const store = useSymbolsStore();
 
@@ -178,11 +180,11 @@
   const showCryptResult = ref(false);
   const showDecryptResult = ref(false);
 
-  const encryptKeyboard = ref(store.getKeyboardByName('encryptKeyboard'));
+  const encryptKeyboard = ref(store.getKeyboardByName(store.currentKeyboard));
 
   // обновление данных при изменении в state Pinia
   store.$subscribe(() => {   
-    encryptKeyboard.value = store.getKeyboardByName('encryptKeyboard');
+    encryptKeyboard.value = store.getKeyboardByName(store.currentKeyboard);
   }, { detached: true })
 
   // функционал копирования пароля
@@ -196,8 +198,7 @@
   watch(focused, focused => {
     if (focused) {
       store.onInput(true);
-    }
-    else {
+    } else {
       store.onInput(false);
     }
   })
@@ -264,7 +265,6 @@
 @media (max-width: 365px)
   .q-pr-md
     padding-right: 10px
-
 .input-pass 
   display: flex
   align-items: center

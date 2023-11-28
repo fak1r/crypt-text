@@ -54,7 +54,7 @@
             v-for="(symbol, key) in item"
             :key="key"
             class="h2"
-            @click="chooseSymbolsToChange(symbol, encryptKeyboard)"
+            @click="chooseSymbolsToChange(symbol, encryptKeyboard, true)"
             :class="{ yellow: symbolToAdd === symbol, blue: symbolToAdd !== symbol }"
           >
             {{ symbol }}
@@ -72,11 +72,11 @@
 
   const store = useSymbolsStore();
 
-  const encryptKeyboard = ref(store.getKeyboardByName('encryptKeyboard'));
+  const encryptKeyboard = ref(store.getKeyboardByName(store.currentKeyboard));
 
   // Обновление данных при изменении в state Pinia
   store.$subscribe(() => {   
-    encryptKeyboard.value = store.getKeyboardByName('encryptKeyboard');
+    encryptKeyboard.value = store.getKeyboardByName(store.currentKeyboard);
   }, { detached: true })
 
   const symbols = ref(store.getKeyboardByName('symbols'));
@@ -120,6 +120,7 @@
     Object.values(symbols.value).find(el => el === symbol)){
       if (!clickOnChar || !clickOnSymbol) repeatedSymbol.value = false;
       if (clickOnChar || clickOnSymbol) repeatedSymbol.value = true;
+     
     } else {
       repeatedSymbol.value = false;
     }
@@ -134,7 +135,7 @@
       clickOnSymbol = false;
       repeatedSymbol.value = false;
       oldKey = '';
-      store.updateKeyboard(keyboard, 'encryptKeyboard');
+      store.updateKeyboard(keyboard, store.currentKeyboard);
     }
   }
 
@@ -175,6 +176,8 @@
 
   // Отслеживание нажатий на клавиатуре, для быстрой замены символов
   document.addEventListener('keydown', (event) => {
+    clickOnSymbol = false;
+    repeatedSymbol.value = false;
     // Отслеживаем нажатие только если не вводим данные в инпут
     if (!store.onInputFlag){
       changeCharactersByKeydown(encryptKeyboard.value, event);
@@ -230,4 +233,6 @@
   color: #efcc03
 .alert
   text-align: right
+.keyboardSelector
+  width: 200px
 </style>

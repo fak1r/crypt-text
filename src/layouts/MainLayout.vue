@@ -123,8 +123,6 @@
       store.lang = lang.value;
     }
   })
-
-
   
 </script>
 
@@ -150,7 +148,7 @@ body
   @media screen and (max-width: 850px) 
     font-size: 20px
 .h2
-  font-size: 24px
+  font-size: 23px
   font-weight: bold
 
   @media screen and (max-width: 1000px) 
@@ -160,36 +158,39 @@ body
   @media screen and (max-width: 455px) 
     font-size: 20px
   @media screen and (max-width: 430px) 
-    font-size: 20px
-  @media screen and (max-width: 410px) 
     font-size: 19px
-  @media screen and (max-width: 400px) 
+  @media screen and (max-width: 410px) 
     font-size: 18px
-  @media screen and (max-width: 380px) 
+  @media screen and (max-width: 400px) 
     font-size: 17px
-  @media screen and (max-width: 365px) 
+  @media screen and (max-width: 380px) 
     font-size: 16px
-  @media screen and (max-width: 345px) 
+  @media screen and (max-width: 365px) 
     font-size: 15px
-  @media screen and (max-width: 330px) 
+  @media screen and (max-width: 345px) 
     font-size: 14px
-  @media screen and (max-width: 310px) 
+  @media screen and (max-width: 330px) 
     font-size: 13px
-  @media screen and (max-width: 300px) 
+  @media screen and (max-width: 310px) 
     font-size: 12px
+  @media screen and (max-width: 300px) 
+    font-size: 11px
   @media screen and (max-width: 265px) 
     font-size: 10px
 .left-menu, .right-menu
-  background-color: #dcd9e1
+  background-color: $primary-light
 .secret-icon
   cursor: pointer
   &:hover
-    fill: #dcd9e1
+    fill: $primary-light
   &:active
     fill: #afa9b8
 .lang-icon
   &:hover
-    color: #dcd9e1
+    color: $primary-light
+  @media screen and (max-width: 500px) 
+    &:hover
+      color: #ffff
   &:active
     color: #afa9b8
 .q-btn--fab
@@ -197,5 +198,4 @@ body
     display: none
 .q-focus-helper
   display: none
-
 </style>

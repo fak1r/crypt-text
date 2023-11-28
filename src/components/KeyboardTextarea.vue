@@ -19,13 +19,13 @@
 
   const store = useSymbolsStore();
 
-  let encryptKeyboard = ref(store.getKeyboardByName('encryptKeyboard'));
+  let encryptKeyboard = ref(store.getKeyboardByName(store.currentKeyboard));
   let encryptKeyboardText = ref(JSON.stringify(encryptKeyboard.value, null, 2));
 
   // отслеживание изменений в store и обновление textarea
 
   store.$subscribe(() => {   
-    encryptKeyboard.value = store.getKeyboardByName('encryptKeyboard');
+    encryptKeyboard.value = store.getKeyboardByName(store.currentKeyboard);
     try {
       encryptKeyboardText.value = JSON.stringify(encryptKeyboard.value, null, 2);
     } 
@@ -38,7 +38,7 @@
 
   watch(encryptKeyboardText, (newText) => {
     try {
-      store.updateKeyboard(JSON.parse(newText), 'encryptKeyboard');
+      store.updateKeyboard(JSON.parse(newText), store.currentKeyboard);
     } 
     catch (error) {
       alert(error)
