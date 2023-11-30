@@ -20,7 +20,7 @@
   onBeforeMount(() => {
     if (store.lang.lang === 'Русский'){
       selectorKeyOptions.value = 'Русский';
-      store.currentKeyboard = 'russianKeyboard';
+      store.currentKeyboard = '(RUS) Public';
     } else {
       selectorKeyOptions.value = 'English';
     }
@@ -29,9 +29,9 @@
   // Изменение раскладки в Конструкторе ключей
   watch(selectorKeyOptions, (newLayout) => {
     if (newLayout === 'English' || newLayout === 'Английский'){
-      store.currentKeyboard = 'englishKeyboard';
+      store.currentKeyboard = '(ENG) Public';
     } else if (newLayout === 'Russian' || newLayout === 'Русский'){
-      store.currentKeyboard = 'russianKeyboard';
+      store.currentKeyboard = '(RUS) Public';
     }
   })
 

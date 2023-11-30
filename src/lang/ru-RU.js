@@ -24,6 +24,8 @@ export default {
   builderChooseWarning: 'Повторный символ',
   builderChooseNewSymbol: 'Выберите новый символ',
   builderChooseOldSymbol: 'Выберите символ для замены',
+  btnSaveKey: 'Сохранить ключ',
+  placeholderNewKeyboard: 'Название клавиатуры',
 
   //LangLayoutSelector.vue
   langSelectorLable: 'Язык клавиатуры',

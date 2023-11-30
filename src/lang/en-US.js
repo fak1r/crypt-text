@@ -24,6 +24,8 @@ export default {
   builderChooseWarning: 'Repeated symbol',
   builderChooseNewSymbol: 'Choose symbol to add',
   builderChooseOldSymbol: 'Choose symbol to remove',
+  btnSaveKey: 'Save key',
+  placeholderNewKeyboard: 'Keyboard name',
 
   //LangLayoutSelector.vue
   langSelectorLable: 'Keyboard language',

@@ -1,12 +1,12 @@
 <template>
-  <div class="q-pa-md" style="max-width: 200px">
+  <div class="q-px-md" style="max-width: 150px">
     <q-input
       v-model="encryptKeyboardText"
-      filled
+      borderless
       ref="textareaRef"
       type="textarea"
-      cols="30"
-      rows="50"
+      cols="0"
+      rows="0"
     />
   </div>
 </template>
@@ -58,7 +58,6 @@
       store.onInput(false);
     }
   })
-
 </script>
 
 
@@ -66,4 +65,6 @@
 .q-textarea .q-field__native, .q-textarea .q-field__prefix, .q-textarea .q-field__suffix
   line-height: 1.5
   font-size: 24px
+  padding: 0
+  display: inline-table
 </style>

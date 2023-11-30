@@ -5,8 +5,8 @@ export const useSymbolsStore = defineStore('symbolsStore', () => {
 
   const keyboards = ref([
     {
-      name: 'englishKeyboard',
-      symbols:  {
+      name: '(ENG) Public',
+      symbols: {
         '0': '♨', '1': '✡', '2': '✷', '3': '✥', '4': '▩', '5': '♜', '6': '♛', '7': '△', '8': '▤', '9': '▣', ' ': '%',
         'A': '▦', 'B': '✪', 'C': '✢', 'D': '✱', 'E': '▪', 'F': '✧', 'G': '✹', 'H': '✺', 'I': '▧', 'J': '▬',
         'K': '▨', 'L': '✤', 'M': '◩', 'N': '◬', 'O': '◪', 'P': '◭', 'Q': '✦', 'R': '✶', 'S': '✣', 'T': '✯',
@@ -17,8 +17,8 @@ export const useSymbolsStore = defineStore('symbolsStore', () => {
       },
     },
     {
-      name: 'russianKeyboard',
-      symbols:  {
+      name: '(RUS) Public',
+      symbols: {
         '0': '♨', '1': '✡', '2': '✷', '3': '✥', '4': '▩', '5': '♜', '6': '♛', '7': '△', '8': '▤', '9': '▣', ' ': '%',
         'А': '▦', 'Б': '✪', 'В': '✢', 'Г': '✱', 'Д': '▪', 'Е': '✧', 'Ж': '✹', 'З': '✺', 'И': '▧', 'Й': '▬',
         'К': '▨', 'Л': '✤', 'М': '◩', 'Н': '◬', 'О': '◪', 'П': '◭', 'Р': '✦', 'С': '✶', 'Т': '✣', 'У': '✯',
@@ -29,29 +29,26 @@ export const useSymbolsStore = defineStore('symbolsStore', () => {
         ',': '⸘', '.': '¼', '!': '©', '?': '¶', ')': '~', '(': '÷', '-': '™'
       },
     },
-    {
-      name: 'symbols',
-      symbols: {
-        '┐': '┐', '└': '└', '┴': '┴', '┌': '┌', '─': '─', '│': '│', '┘': '┘', '├': '├', '┤': '┤', '┬': '┬',
-        '▒': '▒', '▓': '▓', '█': '█', '░': '░', '▀': '▀', '▄': '▄', '■': '■', '□': '□', '▲': '▲', '▼': '▼',
-        '◆': '◆', '○': '○', '●': '●', '◐': '◐', '◑': '◑', '◒': '◒', '◓': '◓', '◔': '◔', '◕': '◕', '⌂': '⌂',
-        '★': '★', '☆': '☆', '✪': '✪', '✽': '✽', '✦': '✦', '✯': '✯', '✰': '✰', '✶': '✶', '✷': '✷', '✵': '✵',
-        '✹': '✹', '✺': '✺', '✸': '✸', '✻': '✻', '✠': '✠', '✡': '✡', '✢': '✢', '✣': '✣', '✤': '✤', '✥': '✥',
-        '⚙': '⚙', '⚚': '⚚', '⚛': '⚛', '⚜': '⚜', '⚝': '⚝', '⚞': '⚞', '⚟': '⚟', '⚠': '⚠', 'œ': 'œ', '⚢': '⚢',
-        '⚣': '⚣', '⚤': '⚤', '⚥': '⚥', '⚦': '⚦', '⚧': '⚧', '⚨': '⚨', '⚩': '⚩', 'Š': 'Š', 'Œ': 'Œ', '⚬': '⚬',
-        '⚭': '⚭', '⚮': '⚮', '⚯': '⚯', '⚰': '⚰', '⚱': '⚱', '⚲': '⚲', '⚳': '⚳', '⚴': '⚴', '⚵': '⚵', '⚶': '⚶',
-        '⚷': '⚷', '⚸': '⚸', '⚹': '⚹', '⚺': '⚺', '⚻': '⚻', '⚼': '⚼', '‡': '‡', '‰': '‰', '⚿': '⚿'
-      }
-    }
   ]);
-  const currentKeyboard = ref('englishKeyboard');
+  const currentKeyboard = ref('(ENG) Public');
   const onInputFlag = ref(false);
   const lang = ref('en-US');
+  const symbols = ref({
+    '┐': '┐', '└': '└', '┴': '┴', '┌': '┌', '─': '─', '│': '│', '┘': '┘', '├': '├', '┤': '┤', '┬': '┬',
+    '▒': '▒', '▓': '▓', '█': '█', '░': '░', '▀': '▀', '▄': '▄', '■': '■', '□': '□', '▲': '▲', '▼': '▼',
+    '◆': '◆', '○': '○', '●': '●', '◐': '◐', '◑': '◑', '◒': '◒', '◓': '◓', '◔': '◔', '◕': '◕', '⌂': '⌂',
+    '★': '★', '☆': '☆', '✪': '✪', '✽': '✽', '✦': '✦', '✯': '✯', '✰': '✰', '✶': '✶', '✷': '✷', '✵': '✵',
+    '✹': '✹', '✺': '✺', '✸': '✸', '✻': '✻', '✠': '✠', '✡': '✡', '✢': '✢', '✣': '✣', '✤': '✤', '✥': '✥',
+    '⚙': '⚙', '⚚': '⚚', '⚛': '⚛', '⚜': '⚜', '⚝': '⚝', '⚞': '⚞', '⚟': '⚟', '⚠': '⚠', 'œ': 'œ', '⚢': '⚢',
+    '⚣': '⚣', '⚤': '⚤', '⚥': '⚥', '⚦': '⚦', '⚧': '⚧', '⚨': '⚨', '⚩': '⚩', 'Š': 'Š', 'Œ': 'Œ', '⚬': '⚬',
+    '⚭': '⚭', '⚮': '⚮', '⚯': '⚯', '⚰': '⚰', '⚱': '⚱', '⚲': '⚲', '⚳': '⚳', '⚴': '⚴', '⚵': '⚵', '⚶': '⚶',
+    '⚷': '⚷', '⚸': '⚸', '⚹': '⚹', '⚺': '⚺', '⚻': '⚻', '⚼': '⚼', '‡': '‡', '‰': '‰', '⚿': '⚿'
+  })
 
   const getKeyboardByName = computed(() => {
     return (name) => {
       return keyboards.value.find(el => el.name === name).symbols;
-    } 
+    }
   });
   const onInput = computed(() => {
     return (flagStatus) => {
@@ -60,17 +57,17 @@ export const useSymbolsStore = defineStore('symbolsStore', () => {
   });
 
   const saveNewKeyboard = (newKeyboard, newKeyboardName) => {
-    keyboards.value.push({ 
-      name: newKeyboardName, 
+    keyboards.value.push({
+      name: newKeyboardName,
       symbols: newKeyboard
     });
   };
   const updateKeyboard = (updatedKeyboard, keyboardName) => {
     keyboards.value.find(el => el.name === keyboardName).symbols = updatedKeyboard;
   }
-  
-  return { 
-    keyboards, currentKeyboard, onInputFlag, lang, getKeyboardByName, 
-    onInput, saveNewKeyboard, updateKeyboard 
+
+  return {
+    keyboards, currentKeyboard, onInputFlag, lang, symbols, getKeyboardByName,
+    onInput, saveNewKeyboard, updateKeyboard
   }
 })

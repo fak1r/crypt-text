@@ -3,7 +3,7 @@
     <div class="child-container">
       <div class="h1 text-center q-pb-md">{{ store.lang.cryptTitle }}</div>
       <div class="q-pb-md">{{ store.lang.cryptText }}</div>
-      <lang-layout-select></lang-layout-select>
+      <keyboard-selector></keyboard-selector>
       <div class="crypt-decrypt" ref="cryptedRef">
         <div class="encrypt">
           <q-input
@@ -22,7 +22,7 @@
             <div class="q-pb-md">
               <q-btn
                 @click="cryptPass"
-                class="btn-crypt"
+                class="btn"
                 :disabled="!textToCrypt"
                 no-caps
               >{{ store.lang.btnCrypt }}
@@ -43,7 +43,7 @@
             <div class="q-pb-md q-pr-md">
               <q-btn
                 @click="textToCrypt = '', cryptedText = ''"
-                class="btn-crypt"
+                class="btn"
                 :disabled="!textToCrypt"
                 no-caps
               >{{ store.lang.btnClear }}
@@ -51,7 +51,7 @@
             </div>
             <div>
               <q-btn
-                class="btn-crypt"
+                class="btn"
                 :disabled="!cryptedText"
                 @click="showCryptResult = true"
                 no-caps
@@ -96,7 +96,7 @@
             <div class="q-pr-md q-pb-md">
               <q-btn
               @click="decryptPass"
-              class="btn-crypt"
+              class="btn"
               :disabled="!textToDecrypt"
               no-caps
               >{{ store.lang.btnDecrypt }}
@@ -105,7 +105,7 @@
             <div class="q-pb-md q-pr-md">
               <q-btn
                 @click="textToDecrypt = '', decryptedText = ''"
-                class="btn-crypt"
+                class="btn"
                 :disabled="!textToDecrypt"
                 no-caps
               >{{ store.lang.btnClear }}
@@ -113,7 +113,7 @@
             </div>
             <div class="q-pb-md q-pr-md">
               <q-btn
-                class="btn-crypt"
+                class="btn"
                 :disabled="!decryptedText"
                 @click="showDecryptResult = true"
                 no-caps
@@ -168,7 +168,7 @@
   import { ref, watch } from 'vue';
   import { useSymbolsStore } from 'src/stores/symbolsStore';
   import { useClipboard, useFocusWithin } from '@vueuse/core';
-  import LangLayoutSelect from './LangLayoutSelect.vue';
+  import KeyboardSelector from './KeyboardSelector.vue';
 
   const store = useSymbolsStore();
 
@@ -176,22 +176,23 @@
   let textToDecrypt = ref('');
   let cryptedText = ref('');
   let decryptedText = ref('');
-  const cryptedRef = ref(null);
   const showCryptResult = ref(false);
   const showDecryptResult = ref(false);
 
   const encryptKeyboard = ref(store.getKeyboardByName(store.currentKeyboard));
 
-  // обновление данных при изменении в state Pinia
+  // Обновление данных при изменении в state Pinia
   store.$subscribe(() => {   
     encryptKeyboard.value = store.getKeyboardByName(store.currentKeyboard);
   }, { detached: true })
 
-  // функционал копирования пароля
+  // Функционал копирования пароля
 
   const { copy, copied } = useClipboard({ source: cryptedText });
 
-  // проверка фокуса 
+  // Проверка фокуса, для отключение отслеживания нажатий в Builder
+
+  const cryptedRef = ref(null);
 
   const { focused } = useFocusWithin(cryptedRef);
 
@@ -203,7 +204,7 @@
     }
   })
 
-  // шифрование 
+  // Шифрование 
 
   const cryptPass = () => {
     const password =  textToCrypt.value;
@@ -218,7 +219,7 @@
     }, 1000)
   }
 
-  // вызов tooltip copied!
+  // Вызов tooltip copied!
   const currentTooltip = ref('');
   const showCryptTooltip = ref(false);
   const showDecryptTooltip = ref(false);
@@ -236,7 +237,7 @@
     }
   })
 
-  // дешифровка
+  // Дешифровка
 
   const decryptPass = () => {
     const decryptArr = textToDecrypt.value.split('');
@@ -278,27 +279,7 @@
   border: none
   padding: 5px
   outline: none
-.btn-crypt 
-  height: 40px
-  padding: 5px 10px
-  background-color: #ff8e3c 
-  color: #0d0d0d 
-  font-weight: bold
-  font-size: 1em
-  border: none
-  border-radius: 4px
-  padding: 10px 20px
-  cursor: pointer
-  transition: background-color 0.3s ease 
-  @media (max-width: 360px)
-    padding: 4px 8px
-.btn-crypt:hover 
-  background-color: #d9376e 
-.btn-crypt:active 
-  background-color: #d71b1b 
-.btn-crypt:disabled 
-  background-color: #ccc 
-  cursor: not-allowed
+
 .crypt-copy-tooltip-component
   background-color: #f3bd96
   color: black

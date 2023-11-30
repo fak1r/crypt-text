@@ -61,14 +61,32 @@
           </td>
         </tr>
       </table>
+      <div class="q-mt-md">
+        <q-input
+          ref="inputRef"
+          v-model="newKeyboardName"
+          color="teal"
+          :placeholder="store.lang.placeholderNewKeyboard"
+          outlined
+          type="text"
+        />
+        <q-btn
+          @click="saveKeyboard"
+          class="btn q-mt-md"
+          no-caps
+          :disabled="!encryptKeyboard"
+        >{{ store.lang.btnSaveKey }}
+        </q-btn>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
 
-  import { ref, onMounted } from 'vue';
+  import { ref, onMounted, watch } from 'vue';
   import { useSymbolsStore } from 'src/stores/symbolsStore'
+  import { useFocusWithin } from '@vueuse/core';
 
   const store = useSymbolsStore();
 
@@ -79,7 +97,7 @@
     encryptKeyboard.value = store.getKeyboardByName(store.currentKeyboard);
   }, { detached: true })
 
-  const symbols = ref(store.getKeyboardByName('symbols'));
+  const symbols = ref(store.symbols);
 
   // Замена символов по клику
   let symbolToRemove = ref('');
@@ -135,7 +153,7 @@
       clickOnSymbol = false;
       repeatedSymbol.value = false;
       oldKey = '';
-      store.updateKeyboard(keyboard, store.currentKeyboard);
+      //store.updateKeyboard(keyboard, store.currentKeyboard); МЕТОД ОБНОВЛЕНИЯ ДОБАВИТЬ
     }
   }
 
@@ -211,9 +229,24 @@
 
   // Сохранение новой клавиатуры в store
 
-  const saveKeyboard = (newKeyboard, newKeyboardName) => {
-    store.saveNewKeyboard(newKeyboard, newKeyboardName);
+  const newKeyboardName = ref('');
+
+  const saveKeyboard = () => {
+    store.saveNewKeyboard(encryptKeyboard, newKeyboardName.value);
   }
+
+  // Проверка фокуса на инпуте
+
+  const inputRef = ref(null);
+  const { focused } = useFocusWithin(inputRef);
+
+  watch(focused, focused => {
+    if (focused) {
+      store.onInput(true);
+    } else {
+      store.onInput(false);
+    }
+  })
 </script>
 
 <style lang="sass">
