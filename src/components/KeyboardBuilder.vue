@@ -61,40 +61,23 @@
           </td>
         </tr>
       </table>
-      <div class="q-mt-md">
-        <q-input
-          ref="inputRef"
-          v-model="newKeyboardName"
-          color="teal"
-          :placeholder="store.lang.placeholderNewKeyboard"
-          outlined
-          type="text"
-        />
-        <q-btn
-          @click="saveKeyboard"
-          class="btn q-mt-md"
-          no-caps
-          :disabled="!encryptKeyboard"
-        >{{ store.lang.btnSaveKey }}
-        </q-btn>
-      </div>
+
     </div>
   </div>
 </template>
 
 <script setup>
 
-  import { ref, onMounted, watch } from 'vue';
+  import { ref, onMounted } from 'vue';
   import { useSymbolsStore } from 'src/stores/symbolsStore'
-  import { useFocusWithin } from '@vueuse/core';
 
   const store = useSymbolsStore();
 
-  const encryptKeyboard = ref(store.getKeyboardByName(store.currentKeyboard));
+  const encryptKeyboard = ref(store.getKeyboardById(store.currentKeyboardId));
 
   // Обновление данных при изменении в state Pinia
-  store.$subscribe(() => {   
-    encryptKeyboard.value = store.getKeyboardByName(store.currentKeyboard);
+  store.$subscribe(() => {  
+    encryptKeyboard.value = store.getKeyboardById(store.currentKeyboardId);
   }, { detached: true })
 
   const symbols = ref(store.symbols);
@@ -122,12 +105,12 @@
       oldKey = key;
       symbolToRemove.value = symbol;
       if (!clickOnChar) symbolToRemove.value = '';
-    } 
-    else {
+    } else {
       if (symbol === symbols.value[symbolToAdd.value]) {
         clickOnSymbol = !clickOnSymbol;
-      } 
-      else clickOnSymbol = true;
+      } else {
+        clickOnSymbol = true;
+      }
       oldKey = key;
       symbolToAdd.value = symbol;
       if (!clickOnSymbol) symbolToAdd.value = '';    
@@ -153,7 +136,6 @@
       clickOnSymbol = false;
       repeatedSymbol.value = false;
       oldKey = '';
-      //store.updateKeyboard(keyboard, store.currentKeyboard); МЕТОД ОБНОВЛЕНИЯ ДОБАВИТЬ
     }
   }
 
@@ -183,12 +165,12 @@
   }
 
   onMounted(() => {
-    containerWidth = document.querySelector('.parent-container').offsetWidth
+    containerWidth = document.querySelector('.parent-container').offsetWidth;
     symbolsInRowCounter();
   })
 
   window.addEventListener('resize', () => {
-    containerWidth = document.querySelector('.parent-container').offsetWidth
+    containerWidth = document.querySelector('.parent-container').offsetWidth;
     symbolsInRowCounter();
   })
 
@@ -226,27 +208,6 @@
       }
     }   
   }
-
-  // Сохранение новой клавиатуры в store
-
-  const newKeyboardName = ref('');
-
-  const saveKeyboard = () => {
-    store.saveNewKeyboard(encryptKeyboard, newKeyboardName.value);
-  }
-
-  // Проверка фокуса на инпуте
-
-  const inputRef = ref(null);
-  const { focused } = useFocusWithin(inputRef);
-
-  watch(focused, focused => {
-    if (focused) {
-      store.onInput(true);
-    } else {
-      store.onInput(false);
-    }
-  })
 </script>
 
 <style lang="sass">

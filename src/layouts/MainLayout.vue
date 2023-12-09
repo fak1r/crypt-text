@@ -17,7 +17,7 @@
         >
         <template v-slot:icon="{ opened }">
           <q-icon
-            size="40px"
+            size="36px"
             class="absolute-center"
             :class="{ 'example-fab-animate--hover': opened !== true }"
             name="language"
@@ -47,13 +47,12 @@
           Menu
         </q-item-label>
         <q-list>
-          <MenuLinks
+          <menu-links
             v-for="link in linksList"
             :key="link.title"
             v-bind="link"
           />
         </q-list>
-        <keyboards-list></keyboards-list>
       </q-list>
     </q-drawer>
 
@@ -63,7 +62,7 @@
       bordered
       show-if-above
       class="right-menu"
-      :width="160"
+      :width="200"
     >
       <q-item-label
         header
@@ -71,23 +70,11 @@
         Key
       </q-item-label>
       <div class="keyboard-textarea">
-        <KeyboardTextarea></KeyboardTextarea>
+        <keyboard-textarea></keyboard-textarea>
       </div>
     </q-drawer>
 
     <q-page-container>
-      <div class="q-pa-md">
-        <q-dialog v-model="dialog" :position="position">
-          <q-card style="width: 240px">
-            <q-card-section class="row items-center no-wrap right-menu">
-
-            </q-card-section>
-          </q-card>
-        </q-dialog>
-      </div>
-
-      <CryptDecrypt></CryptDecrypt>
-      <Keyboard-Builder></Keyboard-Builder>
       <router-view />
     </q-page-container>
 
@@ -97,10 +84,7 @@
 <script setup>
   
   import { ref, watch } from 'vue'
-  import KeyboardBuilder from 'src/components/KeyboardBuilder.vue';
   import KeyboardTextarea from 'src/components/KeyboardTextarea.vue';
-  import KeyboardsList from 'src/components/KeyboardsList.vue';
-  import CryptDecrypt from 'src/components/CryptDecrypt.vue';
   import MenuLinks from 'src/components/MenuLinks.vue';
   import { useQuasar } from 'quasar'
   import languages from 'src/lang/index'
@@ -122,7 +106,7 @@
   const open = (pos) => {
     position.value = pos
     dialog.value = true
-  }
+  };
 
   const linksList = [
     {
@@ -141,7 +125,7 @@
       icon: 'code',
       link: 'https://github.com/fak1r/crypt-text'
     }
-  ]
+  ];
 
   // Переключение языка
   let lang = ref(languages['en-US']);
@@ -150,7 +134,7 @@
 
   if ($q.lang.getLocale() === 'ru-RU'){
     lang.value = languages['ru-RU'];
-  }
+  };
 
   store.lang = lang.value;
 
@@ -162,7 +146,7 @@
       lang.value = languages['en-US'];
       store.lang = lang.value;
     }
-  })
+  });
   
 </script>
 

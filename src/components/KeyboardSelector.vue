@@ -1,9 +1,12 @@
 <template>
   <q-select
     v-model="selectorKeyOptions"
-    :options="store.lang.langSelectorKeys"
+    :options="store.getKeyboardNames"
     class="q-pb-md"
-    color="#67568c"
+    popup-content-class="bg-deep-purple-1"
+    standout
+    label-color="pink-10"
+    bg-color="deep-purple-2"
     :label="store.lang.langSelectorLable"
   />
 </template>
@@ -19,31 +22,36 @@
 
   onBeforeMount(() => {
     if (store.lang.lang === 'Русский'){
-      selectorKeyOptions.value = 'Русский';
-      store.currentKeyboard = '(RUS) Public';
+      selectorKeyOptions.value = '(RUS) Public'; 
+      store.currentKeyboardId = 2;
     } else {
-      selectorKeyOptions.value = 'English';
+      selectorKeyOptions.value = '(ENG) Public';
+      store.currentKeyboardId = 1;
     }
   })
 
-  // Изменение раскладки в Конструкторе ключей
-  watch(selectorKeyOptions, (newLayout) => {
-    if (newLayout === 'English' || newLayout === 'Английский'){
-      store.currentKeyboard = '(ENG) Public';
-    } else if (newLayout === 'Russian' || newLayout === 'Русский'){
-      store.currentKeyboard = '(RUS) Public';
+  // Изменение в Конструкторе ключей
+  watch(selectorKeyOptions, (newKey) => {
+    if (newKey !== ''){
+      store.currentKeyboardId = store.getKeyboardByName(newKey).id;
     }
   })
 
-  // Перевод раскладкок вместе с переводом сайта
+  // Изменение селектора при создании нового ключа
   store.$subscribe(() => {   
-    if (store.lang.lang === 'Русский'){
-      if (selectorKeyOptions.value === 'English') selectorKeyOptions.value = 'Английский'
-      if (selectorKeyOptions.value === 'Russian') selectorKeyOptions.value = 'Русский'
+    const newKeyId = store.currentKeyboardId;
+    if (newKeyId !== null) {
+      const newKeyName = store.keyboards.find(key => key.id === newKeyId).name;
+      selectorKeyOptions.value = newKeyName;
     } else {
-      if (selectorKeyOptions.value === 'Английский') selectorKeyOptions.value = 'English'
-      if (selectorKeyOptions.value === 'Русский') selectorKeyOptions.value = 'Russian'
+      selectorKeyOptions.value = '';
     }
+
   }, { detached: true })
 
 </script>
+
+<style lang="sass">
+.q-field--standout.q-field--highlighted .q-field__native
+  color: #c71585
+</style>

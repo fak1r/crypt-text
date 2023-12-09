@@ -16,7 +16,7 @@ export default {
   placeholderCrypt: 'текст для шифрования',
   placeholderDecrypt: 'секретный код',
 
-  // KeyboardSymbols.vue
+  // KeyboardBuilder.vue
   builderTitle: 'Конструктор ключей шифрования',
   builderText: 'Вы можете изменить, экспортировать и импортировать секретный ключ кликнув на иконку в правом верхнем углу',
   builderKeyboard: 'Клавиатура:',
@@ -24,10 +24,14 @@ export default {
   builderChooseWarning: 'Повторный символ',
   builderChooseNewSymbol: 'Выберите новый символ',
   builderChooseOldSymbol: 'Выберите символ для замены',
-  btnSaveKey: 'Сохранить ключ',
+  btnSaveKey: 'Создать новый ключ',
   placeholderNewKeyboard: 'Название клавиатуры',
 
   //LangLayoutSelector.vue
-  langSelectorLable: 'Язык клавиатуры',
-  langSelectorKeys: ['Английский', 'Русский']
+  langSelectorLable: 'Выбранный ключ',
+  langSelectorKeys: ['Английский', 'Русский'],
+
+  // KeyList.vue
+  repeatedKey: 'Нельзя указывать одинаковые имена ключей',
+  deleteKeyNotice: 'Вы уверены что хотите удалить ключ?',
 }

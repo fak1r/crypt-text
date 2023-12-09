@@ -1,12 +1,12 @@
 <template>
-  <div class="q-px-md" style="max-width: 150px">
+  <div class="q-px-md textarea" style="max-width: 200px">
     <q-input
       v-model="encryptKeyboardText"
       borderless
       ref="textareaRef"
       type="textarea"
-      cols="0"
-      rows="0"
+      cols="20"
+      rows="100"
     />
   </div>
 </template>
@@ -19,18 +19,22 @@
 
   const store = useSymbolsStore();
 
-  let encryptKeyboard = ref(store.getKeyboardByName(store.currentKeyboard));
+  let encryptKeyboard = ref(store.getKeyboardById(store.currentKeyboardId));
   let encryptKeyboardText = ref(JSON.stringify(encryptKeyboard.value, null, 2));
 
   // отслеживание изменений в store и обновление textarea
 
   store.$subscribe(() => {   
-    encryptKeyboard.value = store.getKeyboardByName(store.currentKeyboard);
-    try {
-      encryptKeyboardText.value = JSON.stringify(encryptKeyboard.value, null, 2);
-    } 
-    catch (error) {
-      alert(error)
+    if (store.currentKeyboardId !== null){
+      encryptKeyboard.value = store.getKeyboardById(store.currentKeyboardId);
+      try {
+        encryptKeyboardText.value = JSON.stringify(encryptKeyboard.value, null, 2);
+      } 
+      catch (error) {
+        console.log('KEY FORMAT ', error);
+      }
+    } else {
+      encryptKeyboardText.value = '';
     }
   }, { detached: true })
 
@@ -38,10 +42,10 @@
 
   watch(encryptKeyboardText, (newText) => {
     try {
-      store.updateKeyboard(JSON.parse(newText), store.currentKeyboard);
+      store.updateKeyboard(JSON.parse(newText), store.currentKeyboardId);
     } 
     catch (error) {
-      alert(error)
+      console.log('KEY FORMAT ', error);
     }
   });
 
@@ -66,5 +70,5 @@
   line-height: 1.5
   font-size: 24px
   padding: 0
-  display: inline-table
+  text-align: center
 </style>

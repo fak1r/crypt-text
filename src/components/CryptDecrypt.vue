@@ -102,7 +102,7 @@
               >{{ store.lang.btnDecrypt }}
               </q-btn>
             </div>
-            <div class="q-pb-md q-pr-md">
+            <div class="q-pr-md q-pb-md">
               <q-btn
                 @click="textToDecrypt = '', decryptedText = ''"
                 class="btn"
@@ -111,7 +111,7 @@
               >{{ store.lang.btnClear }}
               </q-btn>
             </div>
-            <div class="q-pb-md q-pr-md">
+            <div class="q-pr-md q-pb-md">
               <q-btn
                 class="btn"
                 :disabled="!decryptedText"
@@ -179,11 +179,11 @@
   const showCryptResult = ref(false);
   const showDecryptResult = ref(false);
 
-  const encryptKeyboard = ref(store.getKeyboardByName(store.currentKeyboard));
+  const encryptKeyboard = ref(store.getKeyboardById(store.currentKeyboardId));
 
   // Обновление данных при изменении в state Pinia
   store.$subscribe(() => {   
-    encryptKeyboard.value = store.getKeyboardByName(store.currentKeyboard);
+    encryptKeyboard.value = store.getKeyboardById(store.currentKeyboardId);
   }, { detached: true })
 
   // Функционал копирования пароля
@@ -266,6 +266,8 @@
 @media (max-width: 365px)
   .q-pr-md
     padding-right: 10px
+  .q-pb-md
+    padding-bottom: 10px
 .input-pass 
   display: flex
   align-items: center

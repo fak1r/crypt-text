@@ -16,7 +16,7 @@ export default {
   placeholderCrypt: 'text to encrypt',
   placeholderDecrypt: 'secret code',
 
-  // KeyboardSymbols.vue
+  // KeyboardBuilder.vue
   builderTitle: 'Encryption key builder',
   builderText: 'You can change, export and import secret key by click on the icon in the upper right corner',
   builderKeyboard: 'Keyboard:',
@@ -24,11 +24,14 @@ export default {
   builderChooseWarning: 'Repeated symbol',
   builderChooseNewSymbol: 'Choose symbol to add',
   builderChooseOldSymbol: 'Choose symbol to remove',
-  btnSaveKey: 'Save key',
+  btnSaveKey: 'Create new key',
   placeholderNewKeyboard: 'Keyboard name',
 
-  //LangLayoutSelector.vue
-  langSelectorLable: 'Keyboard language',
-  langSelectorKeys: ['English', 'Russian']
+  // LangLayoutSelector.vue
+  langSelectorLable: 'Current key',
+  langSelectorKeys: ['English', 'Russian'],
 
+  // KeyList.vue
+  repeatedKey: 'Duplicate key name is not allowed',
+  deleteKeyNotice: 'Are you sure you want to delete the key?'
 }
