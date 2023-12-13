@@ -3,8 +3,8 @@
     <div class="child-container">
       <div class="q-pt-md">
         <q-input
-          ref="inputRef"
-          v-model="newKeyboardName"
+          ref="inputAddNewRef"
+          v-model="createNewKeyName"
           color="teal"
           :placeholder="store.lang.placeholderNewKeyboard"
           outlined
@@ -27,14 +27,24 @@
               <q-item-label>{{ keyboard.name }}</q-item-label>
             </q-item-section>
             <q-item-section side>
-              <q-btn
-                color="red-5"
-                icon="delete"
-                flat
-                round
-                dense
-                @click="keyIdToDelete = keyboard.id, deleteModal = true"
-              />
+              <div class="row">
+                <q-btn
+                  color="blue-5"
+                  icon="edit"
+                  flat
+                  round
+                  dense
+                  @click="keyIdToRename = keyboard.id, editModal = true, editedKeyName = keyboard.name"
+                />
+                <q-btn
+                  color="red-5"
+                  icon="delete"
+                  flat
+                  round
+                  dense
+                  @click="keyIdToDelete = keyboard.id, deleteModal = true"
+                />
+              </div>
             </q-item-section>
           </q-item>
         </q-list>
@@ -52,6 +62,22 @@
           </q-card>
         </q-dialog>
 
+        <q-dialog v-model="editModal" persistent>
+          <q-card style="min-width: 350px">
+            <q-card-section>
+              <div class="text-h6">{{ store.lang.editKeyNotice }}</div>
+            </q-card-section>
+
+            <q-card-section class="q-pt-none">
+              <q-input dense v-model="editedKeyName" autofocus @keyup.enter="editModal = false" />
+            </q-card-section>
+
+            <q-card-actions align="right" class="text-primary">
+              <q-btn flat label="Cancel" v-close-popup />
+              <q-btn flat label="Save" v-close-popup @click="editKeyboardName(keyIdToRename)"/>
+            </q-card-actions>
+          </q-card>
+        </q-dialog>
       </div>
     </div>
   </div>
@@ -67,20 +93,34 @@
 
   const deleteModal = ref(false);
   const keyIdToDelete = ref(0);
+  const editModal = ref(false);
+  const keyIdToRename = ref(0);
+  const editedKeyName = ref('');
 
   // Сохранение новой клавиатуры в store
 
-  const newKeyboardName = ref('');
+  const createNewKeyName = ref('');
   const alertSameName = ref('');
 
   const createKeyboard = () => {
-    if (store.keyboards.find(key => key.name === newKeyboardName.value)){
+    if (store.keyboards.find(key => key.name === createNewKeyName.value)){
       alertSameName.value = store.lang.repeatedKey;
     } else {
-      store.createNewKeyboard(newKeyboardName.value);
+      store.createNewKeyboard(createNewKeyName.value);
       alertSameName.value = '';
+      createNewKeyName.value = '';
     }
   };
+
+  const editKeyboardName = (keyIdToRename) => {
+    const sameNamedKey = store.keyboards.find(key => key.name === editedKeyName.value);
+    if (sameNamedKey && sameNamedKey.id !== keyIdToRename){
+      alertSameName.value = store.lang.repeatedKey;
+    } else {
+      store.editKeyboardName(keyIdToRename, editedKeyName.value)
+      alertSameName.value = '';
+    }
+  }
 
   // Перевод алёрта на другой язык
 
@@ -92,8 +132,8 @@
 
   // Проверка фокуса на инпуте
 
-  const inputRef = ref(null);
-  const { focused } = useFocusWithin(inputRef);
+  const inputAddNewRef = ref(null);
+  const { focused } = useFocusWithin(inputAddNewRef);
 
   watch(focused, focused => {
     if (focused) {
@@ -104,6 +144,15 @@
     }
   });
 
+  watch(editModal, newState => {
+    if (newState === true){
+      alertSameName.value = '';
+      store.onInput(true);
+    } else {
+      store.onInput(false);
+    }
+  })
+  
   // Подсветка выбранного ключа
 
   const currentKeyStyle = computed(() => {

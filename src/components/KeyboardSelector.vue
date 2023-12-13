@@ -18,6 +18,7 @@
   const store = useSymbolsStore();
 
   // Выбор раскладки при первом входе
+
   const selectorKeyOptions = ref('');
 
   onBeforeMount(() => {
@@ -31,6 +32,7 @@
   })
 
   // Изменение в Конструкторе ключей
+
   watch(selectorKeyOptions, (newKey) => {
     if (newKey !== ''){
       store.currentKeyboardId = store.getKeyboardByName(newKey).id;
@@ -38,6 +40,7 @@
   })
 
   // Изменение селектора при создании нового ключа
+  
   store.$subscribe(() => {   
     const newKeyId = store.currentKeyboardId;
     if (newKeyId !== null) {

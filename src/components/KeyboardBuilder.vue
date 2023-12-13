@@ -8,7 +8,10 @@
       <table>
         <tr>
           <td colspan="16">
-            <div class="h2">{{ store.lang.builderKeyboard }}</div>
+            <div class="h2">
+              {{ store.lang.builderKeyboard }} 
+              <span class="h2" v-if="!encryptKeyboard">{{ store.lang.emptyKey }}</span>
+            </div>
           </td>
         </tr>
         <tr
@@ -76,6 +79,7 @@
   const encryptKeyboard = ref(store.getKeyboardById(store.currentKeyboardId));
 
   // Обновление данных при изменении в state Pinia
+  
   store.$subscribe(() => {  
     encryptKeyboard.value = store.getKeyboardById(store.currentKeyboardId);
   }, { detached: true })
@@ -83,6 +87,7 @@
   const symbols = ref(store.symbols);
 
   // Замена символов по клику
+
   let symbolToRemove = ref('');
   let symbolToAdd = ref('');
   let repeatedSymbol = ref('');
@@ -140,6 +145,7 @@
   }
 
   // Вывод в шаблон построчно
+
   const chunkedKeyValuePairs = (inputObject, chunkSize) => {
     // Преобразование объекта в массив для удобства обработки
     const arrayFromObject = Object.entries(inputObject);
@@ -175,6 +181,7 @@
   })
 
   // Отслеживание нажатий на клавиатуре, для быстрой замены символов
+
   document.addEventListener('keydown', (event) => {
     clickOnSymbol = false;
     repeatedSymbol.value = false;

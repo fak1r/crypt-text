@@ -5,20 +5,20 @@ export default {
   cryptTitle: 'Шифрование текста',
   cryptText: 'Обязательно вводите текст, используя клавиши, содержащиеся в секретном ключе.',
 
-  btnCrypt: 'Шифровать и Копировать',
+  btnCrypt: 'Шифровать',
   btnDecrypt: 'Дешифровать',
   btnClear: 'Очистить',
   btnCopy: 'Копировать',
   btnShowResult: 'Результат',
-  copyTooltip: 'Скопировано!',
+  copyTooltip: 'Успех!',
   popupCryptTitle: 'Зашифрованный текст',
   popupDecryptTitle: 'Дешифрованный текст',
-  placeholderCrypt: 'текст для шифрования',
-  placeholderDecrypt: 'секретный код',
+  placeholderCrypt: 'Текст для шифрования',
+  placeholderDecrypt: 'Секретный код',
 
   // KeyboardBuilder.vue
   builderTitle: 'Конструктор ключей шифрования',
-  builderText: 'Вы можете изменить, экспортировать и импортировать секретный ключ кликнув на иконку в правом верхнем углу',
+  builderText: 'Вы можете изменить, экспортировать и импортировать секретный ключ в меню справа',
   builderKeyboard: 'Клавиатура:',
   builderSymbols: 'Символы:',
   builderChooseWarning: 'Повторный символ',
@@ -26,6 +26,7 @@ export default {
   builderChooseOldSymbol: 'Выберите символ для замены',
   btnSaveKey: 'Создать новый ключ',
   placeholderNewKeyboard: 'Название клавиатуры',
+  emptyKey: 'Не выбрана',
 
   //LangLayoutSelector.vue
   langSelectorLable: 'Выбранный ключ',
@@ -34,4 +35,5 @@ export default {
   // KeyList.vue
   repeatedKey: 'Нельзя указывать одинаковые имена ключей',
   deleteKeyNotice: 'Вы уверены что хотите удалить ключ?',
+  editKeyNotice: 'Новое имя ключа'
 }

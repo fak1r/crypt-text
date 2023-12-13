@@ -11,13 +11,14 @@
             color="teal"
             :placeholder="store.lang.placeholderCrypt"
             outlined
-            type="text"
+            :type="cryptInputType"
           >
             <template v-slot:append>
-              <svg fill="#AAA" xmlns="http://www.w3.org/2000/svg" height="30" viewBox="0 -960 960 960" width="30"><path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"/></svg>
+              <q-icon class="input-icon" v-if="textToCrypt" name="close" @click="textToCrypt = ''" />
+              <q-icon class="input-icon" v-if="cryptInputType === 'text'" @click="cryptInputType = 'password'" name="visibility"></q-icon>
+              <q-icon class="input-icon" v-if="cryptInputType === 'password'" @click="cryptInputType = 'text'" name="visibility_off"></q-icon>
             </template>
           </q-input>
-
           <div class="q-py-md flex ">
             <div class="q-pb-md">
               <q-btn
@@ -27,28 +28,8 @@
                 no-caps
               >{{ store.lang.btnCrypt }}
               </q-btn>
-            
-              <div class="crypt-copy-tooltip">
-                <q-tooltip
-                  class="crypt-copy-tooltip-component "
-                  v-model="showCryptTooltip"
-                  :offset="[10, 45]"
-                  anchor="top middle"
-                  self="bottom middle"
-                >{{ store.lang.copyTooltip }}
-                </q-tooltip>
-              </div>
             </div>
             <span class="q-pr-md"></span>
-            <div class="q-pb-md q-pr-md">
-              <q-btn
-                @click="textToCrypt = '', cryptedText = ''"
-                class="btn"
-                :disabled="!textToCrypt"
-                no-caps
-              >{{ store.lang.btnClear }}
-              </q-btn>
-            </div>
             <div>
               <q-btn
                 class="btn"
@@ -57,25 +38,13 @@
                 no-caps
               >{{ store.lang.btnShowResult }}
               </q-btn>
-              <q-dialog v-model="showCryptResult">
-                <q-card class="secret-answer">
-                  <q-card-section>
-                    <div class="text-h6">{{ store.lang.popupCryptTitle }}</div>
-                  </q-card-section>
-
-                  <q-separator />
-
-                  <q-card-section style="max-height: 50vh" class="scroll">
-                    <p class="h2">{{ cryptedText }}</p>
-                  </q-card-section>
-
-                  <q-separator />
-
-                  <q-card-actions align="right">
-                    <q-btn flat label="Ok" color="primary" v-close-popup />
-                  </q-card-actions>
-                </q-card>
-              </q-dialog>
+              <modal-dialog
+                v-model="showCryptResult"
+                :title="store.lang.popupCryptTitle"
+                :text="cryptedText"
+                :tooltip="'Crypt'"
+                @clearText="cryptedText = ''"
+              ></modal-dialog>
             </div>
           </div>    
         </div>
@@ -89,7 +58,7 @@
             type="text"
           >
             <template v-slot:append>
-              <svg fill="#AAA" xmlns="http://www.w3.org/2000/svg" height="30" viewBox="0 -960 960 960" width="30"><path d="M420-360h120l-23-129q20-10 31.5-29t11.5-42q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 23 11.5 42t31.5 29l-23 129Zm60 280q-139-35-229.5-159.5T160-516v-244l320-120 320 120v244q0 152-90.5 276.5T480-80Zm0-84q104-33 172-132t68-220v-189l-240-90-240 90v189q0 121 68 220t172 132Zm0-316Z"/></svg>
+              <q-icon v-if="textToDecrypt" name="close" @click="textToDecrypt = ''" class="cursor-pointer" />
             </template>
           </q-input>
           <div class="q-py-md flex">
@@ -104,57 +73,18 @@
             </div>
             <div class="q-pr-md q-pb-md">
               <q-btn
-                @click="textToDecrypt = '', decryptedText = ''"
-                class="btn"
-                :disabled="!textToDecrypt"
-                no-caps
-              >{{ store.lang.btnClear }}
-              </q-btn>
-            </div>
-            <div class="q-pr-md q-pb-md">
-              <q-btn
                 class="btn"
                 :disabled="!decryptedText"
                 @click="showDecryptResult = true"
                 no-caps
               >{{ store.lang.btnShowResult }}
               </q-btn>
-              <q-dialog v-model="showDecryptResult">
-                <q-card class="secret-answer">
-                  <q-card-section>
-                    <div class="text-h6">{{ store.lang.popupDecryptTitle }}</div>
-                  </q-card-section>
-
-                  <q-separator />
-
-                  <q-card-section style="max-height: 50vh" class="scroll">
-                    <p class="h2">{{ decryptedText }}</p>
-                  </q-card-section>
-
-                  <q-separator />
-
-                  <q-card-actions align="right">
-                    <div>
-                      <q-btn
-                        @click="copyDecrypted"
-                        flat
-                        no-caps
-                      >{{ store.lang.btnCopy }}
-                      </q-btn>
-                      <div class="decrypt-copy-tooltip">
-                        <q-tooltip
-                          v-model="showDecryptTooltip"
-                          :offset="[0, 45]"
-                          anchor="top middle"
-                          self="bottom middle"
-                        >{{ store.lang.copyTooltip }}
-                        </q-tooltip>
-                      </div>
-                    </div>
-                    <q-btn flat label="Ok" v-close-popup />
-                  </q-card-actions>
-                </q-card>
-              </q-dialog>
+              <modal-dialog
+                v-model="showDecryptResult"
+                :title="store.lang.popupDecryptTitle"
+                :text="decryptedText"
+                @clear-text="decryptedText = ''"
+              ></modal-dialog>
             </div>
           </div>
         </div>
@@ -167,8 +97,9 @@
 
   import { ref, watch } from 'vue';
   import { useSymbolsStore } from 'src/stores/symbolsStore';
-  import { useClipboard, useFocusWithin } from '@vueuse/core';
+  import { useFocusWithin } from '@vueuse/core';
   import KeyboardSelector from './KeyboardSelector.vue';
+  import ModalDialog from './ModalDialog.vue';
 
   const store = useSymbolsStore();
 
@@ -178,17 +109,15 @@
   let decryptedText = ref('');
   const showCryptResult = ref(false);
   const showDecryptResult = ref(false);
+  const cryptInputType = ref('text');
 
   const encryptKeyboard = ref(store.getKeyboardById(store.currentKeyboardId));
 
   // Обновление данных при изменении в state Pinia
+  
   store.$subscribe(() => {   
     encryptKeyboard.value = store.getKeyboardById(store.currentKeyboardId);
   }, { detached: true })
-
-  // Функционал копирования пароля
-
-  const { copy, copied } = useClipboard({ source: cryptedText });
 
   // Проверка фокуса, для отключение отслеживания нажатий в Builder
 
@@ -212,30 +141,8 @@
     const cryptArray = [];
     passArray.forEach(el => cryptArray.push(encryptKeyboard.value[el]));
     cryptedText.value = cryptArray.join('');
-    currentTooltip.value = 'Crypt';
-    copy(cryptedText.value);
-    setTimeout(() => {
-      currentTooltip.value = '';
-    }, 1000)
+    showCryptResult.value = true;
   }
-
-  // Вызов tooltip copied!
-  const currentTooltip = ref('');
-  const showCryptTooltip = ref(false);
-  const showDecryptTooltip = ref(false);
-
-  watch(copied, copiedUpdate => {
-    if (copiedUpdate && currentTooltip.value === 'Crypt'){
-      showCryptTooltip.value = true;
-    } else {
-      showCryptTooltip.value = false;
-    }
-    if (copiedUpdate && currentTooltip.value === 'Decrypt'){
-      showDecryptTooltip.value = true;
-    } else {
-      showDecryptTooltip.value = false;
-    }
-  })
 
   // Дешифровка
 
@@ -250,16 +157,8 @@
       });
     }
     decryptedText.value = result.join('');
+    showDecryptResult.value = true;
   }
-
-  const copyDecrypted = () => {
-    currentTooltip.value = 'Decrypt';
-    copy(decryptedText.value);
-    setTimeout(() => {
-      currentTooltip.value = '';
-    }, 1000)
-  }  
-
 </script>
 
 <style lang="sass">
@@ -281,13 +180,11 @@
   border: none
   padding: 5px
   outline: none
-
-.crypt-copy-tooltip-component
-  background-color: #f3bd96
-  color: black
-.show-result
-  background-color: #babdc8
-  color: black
-.secret-answer
-  background-color: #babdc8
+.input-icon
+  cursor: pointer
+  @media (hover: hover) 
+    &:hover
+      color: #adadad
+  &:active
+    color: #adadad
 </style>

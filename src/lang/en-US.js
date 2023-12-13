@@ -5,20 +5,20 @@ export default {
   cryptTitle: 'Encryption text',
   cryptText: 'Be sure to enter text using the keys contained in the secret key.',
 
-  btnCrypt: 'Encrypt & Copy',
+  btnCrypt: 'Encrypt',
   btnDecrypt: 'Decrypt',
   btnClear: 'Clear',
   btnCopy: 'Copy',
   btnShowResult: 'Show result',
-  copyTooltip: 'Copied!',
+  copyTooltip: 'Done!',
   popupCryptTitle: 'Encrypted text',
   popupDecryptTitle: 'Decrypted text',
-  placeholderCrypt: 'text to encrypt',
-  placeholderDecrypt: 'secret code',
+  placeholderCrypt: 'Text to encrypt',
+  placeholderDecrypt: 'Secret code',
 
   // KeyboardBuilder.vue
   builderTitle: 'Encryption key builder',
-  builderText: 'You can change, export and import secret key by click on the icon in the upper right corner',
+  builderText: 'You can change, export and import secret key in right menu',
   builderKeyboard: 'Keyboard:',
   builderSymbols: 'Symbols:',
   builderChooseWarning: 'Repeated symbol',
@@ -26,6 +26,7 @@ export default {
   builderChooseOldSymbol: 'Choose symbol to remove',
   btnSaveKey: 'Create new key',
   placeholderNewKeyboard: 'Keyboard name',
+  emptyKey: 'Not selected',
 
   // LangLayoutSelector.vue
   langSelectorLable: 'Current key',
@@ -33,5 +34,6 @@ export default {
 
   // KeyList.vue
   repeatedKey: 'Duplicate key name is not allowed',
-  deleteKeyNotice: 'Are you sure you want to delete the key?'
+  deleteKeyNotice: 'Are you sure you want to delete the key?',
+  editKeyNotice: 'New key name'
 }

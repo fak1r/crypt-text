@@ -145,10 +145,19 @@ export const useSymbolsStore = defineStore('symbolsStore', () => {
     }
   };
 
+  const editKeyboardName = (id, newName) => {
+    if (keyboards.value.find(key => key.name === newName)){
+      return;
+    } else {
+      const keyToRename = keyboards.value.find(key => key.id === id);
+      keyToRename.name = newName;
+    }
+  };
+
 
   return {
     keyboards, currentKeyboardId, onInputFlag, lang, symbols, 
     getKeyboardByName, getKeyboardById, onInput, getKeyboardNames, getKeyboardIds,
-    createNewKeyboard, updateKeyboard, deleteKeyboard
+    createNewKeyboard, updateKeyboard, deleteKeyboard, editKeyboardName
   }
 })

@@ -22,7 +22,7 @@
   let encryptKeyboard = ref(store.getKeyboardById(store.currentKeyboardId));
   let encryptKeyboardText = ref(JSON.stringify(encryptKeyboard.value, null, 2));
 
-  // отслеживание изменений в store и обновление textarea
+  // Отслеживание изменений в store и обновление textarea
 
   store.$subscribe(() => {   
     if (store.currentKeyboardId !== null){
@@ -38,7 +38,7 @@
     }
   }, { detached: true })
 
-  // отслеживание изменений в textarea и обновление в store
+  // Отслеживание изменений в textarea и обновление в store
 
   watch(encryptKeyboardText, (newText) => {
     try {
@@ -49,7 +49,7 @@
     }
   });
 
-  // проверка фокуса
+  // Проверка фокуса
 
   const textareaRef = ref(null);
   const { focused } = useFocusWithin(textareaRef);
