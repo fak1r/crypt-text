@@ -1,6 +1,6 @@
 <template>
-  <q-dialog v-model="props.modelValue">
-    <q-card class="secret-answer">
+  <q-dialog persistent v-model="props.modelValue" >
+    <q-card ref="clickOutsideRef" class="secret-answer">
       <q-card-section>
         <div class="text-h6">{{ props.title }}</div>
       </q-card-section>
@@ -8,7 +8,7 @@
       <q-separator />
 
       <q-card-section style="max-height: 50vh" class="scroll">
-        <p class="h2">{{ props.text }}</p>
+        <p class="h2">{{ text }}</p>
       </q-card-section>
 
       <q-separator />
@@ -16,7 +16,7 @@
       <q-card-actions align="right">
         <div>
           <q-btn
-            @click="copy(props.text)"
+            @click="copy(text)"
             flat
             no-caps
           >{{ store.lang.btnCopy }}
@@ -48,7 +48,7 @@
   import { ref, watch } from 'vue';
 
   import { useSymbolsStore } from 'src/stores/symbolsStore';
-  import { useClipboard } from '@vueuse/core';
+  import { useClipboard, onClickOutside } from '@vueuse/core';
 
   const store = useSymbolsStore();
 
@@ -74,6 +74,11 @@
 
   const emit = defineEmits(['update:modelValue', 'clear-text']);
 
+  // Скрытие при клике за окно
+
+  const clickOutsideRef = ref(null);
+  onClickOutside(clickOutsideRef, event => emit('update:modelValue', false))
+
   // Tooltip copied
 
   const { copy, copied } = useClipboard({ source: props.text });
@@ -92,5 +97,4 @@
 <style lang="sass">
 .secret-answer
   background-color: #babdc8
-
 </style>

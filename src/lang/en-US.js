@@ -2,7 +2,7 @@ export default {
   lang: 'English',
   
   // CryptDecrypt.vue
-  cryptTitle: 'Encryption text',
+  cryptTitle: 'Encryption and decryption text',
   cryptText: 'Be sure to enter text using the keys contained in the secret key.',
 
   btnCrypt: 'Encrypt',
@@ -18,7 +18,7 @@ export default {
 
   // KeyboardBuilder.vue
   builderTitle: 'Encryption key builder',
-  builderText: 'You can change, export and import secret key in right menu',
+  builderText: 'Select the key and character to replace. Repeated characters are prohibited on the keyboard, this is necessary for correct decryption.',
   builderKeyboard: 'Keyboard:',
   builderSymbols: 'Symbols:',
   builderChooseWarning: 'Repeated symbol',
@@ -33,6 +33,8 @@ export default {
   langSelectorKeys: ['English', 'Russian'],
 
   // KeyList.vue
+  keyListTitle: 'Key list',
+  keyListText: 'You can add, remove and edit keys here. Duplicate key name is not allowed',
   repeatedKey: 'Duplicate key name is not allowed',
   deleteKeyNotice: 'Are you sure you want to delete the key?',
   editKeyNotice: 'New key name'

@@ -1,22 +1,11 @@
 <template>
-  <div class="parent-container">
+  <div class="parent-container q-pt-md">
     <div class="child-container">
+      <div class="h1 text-center">{{ store.lang.keyListTitle }}</div>
       <div class="q-pt-md">
-        <q-input
-          ref="inputAddNewRef"
-          v-model="createNewKeyName"
-          color="teal"
-          :placeholder="store.lang.placeholderNewKeyboard"
-          outlined
-          type="text"
-        />
-        <q-btn
-          @click="createKeyboard"
-          class="btn q-my-md"
-          no-caps
-        >{{ store.lang.btnSaveKey }}
-        </q-btn>
-        <span class="alert-same-name">{{ alertSameName }}</span>
+        {{ store.lang.keyListText }}
+      </div>
+      <div class="q-pt-md">
         <q-list separator bordered >
           <q-item
             :class="currentKeyStyle(keyboard)"
@@ -48,22 +37,38 @@
             </q-item-section>
           </q-item>
         </q-list>
+        <div class="q-pt-md" ref="inputAddNewRef">
+          <input-text
+            v-model="createNewKeyName"
+            :placeholder="store.lang.placeholderNewKeyboard"
+          >   
+            <template #buttons>
+              <q-btn
+                @click="createKeyboard"
+                class="btn"
+                no-caps
+              >{{ store.lang.btnSaveKey }}
+              </q-btn>
+              <span v-if="alertSameName && !editModal" class="alert-same-name">{{ alertSameName }}</span>
+            </template>
+          </input-text>
+        </div>
 
         <q-dialog v-model="deleteModal" persistent>
-          <q-card>
+          <q-card class="modal">
             <q-card-section class="row items-center">
               <span class="q-ml-sm">{{ store.lang.deleteKeyNotice }}</span>
             </q-card-section>
 
             <q-card-actions align="right">
-              <q-btn flat label="Cancel" color="primary" v-close-popup />
+              <q-btn flat label="Cancel" text-color="black" v-close-popup />
               <q-btn flat label="Delete" text-color="red" color="primary" @click="store.deleteKeyboard(keyIdToDelete)" v-close-popup />
             </q-card-actions>
           </q-card>
         </q-dialog>
 
         <q-dialog v-model="editModal" persistent>
-          <q-card style="min-width: 350px">
+          <q-card class="modal" style="min-width: 350px">
             <q-card-section>
               <div class="text-h6">{{ store.lang.editKeyNotice }}</div>
             </q-card-section>
@@ -72,10 +77,13 @@
               <q-input dense v-model="editedKeyName" autofocus @keyup.enter="editModal = false" />
             </q-card-section>
 
-            <q-card-actions align="right" class="text-primary">
+            <span v-if="alertSameName" class="alert-same-name">{{ alertSameName }}</span>
+
+            <q-card-actions align="right" class="text-black">
               <q-btn flat label="Cancel" v-close-popup />
-              <q-btn flat label="Save" v-close-popup @click="editKeyboardName(keyIdToRename)"/>
+              <q-btn flat label="Save" @click="editKeyboardName(keyIdToRename)"/>
             </q-card-actions>
+
           </q-card>
         </q-dialog>
       </div>
@@ -86,8 +94,8 @@
 <script setup>
 
   import { computed, ref, watch } from 'vue';
-  import { useFocusWithin } from '@vueuse/core';
-  import { useSymbolsStore } from 'src/stores/symbolsStore'
+  import { useSymbolsStore } from 'src/stores/symbolsStore';
+  import InputText from './InputText.vue';
 
   const store = useSymbolsStore();
 
@@ -119,39 +127,30 @@
     } else {
       store.editKeyboardName(keyIdToRename, editedKeyName.value)
       alertSameName.value = '';
+      editModal.value = false;
     }
-  }
+  };
 
-  // Перевод алёрта на другой язык
+  // Перевод алёрта на другой язык и скрытие при фокусе на инпут
 
-  store.$subscribe(() => {   
-    if (alertSameName.value !== '') {
+  store.$subscribe(() => {  
+    if (store.onInputFlag){
+      alertSameName.value = '';
+    } 
+    if (alertSameName.value !== ''){
       alertSameName.value = store.lang.repeatedKey;
     }
-  }, { detached: true })
-
-  // Проверка фокуса на инпуте
-
-  const inputAddNewRef = ref(null);
-  const { focused } = useFocusWithin(inputAddNewRef);
-
-  watch(focused, focused => {
-    if (focused) {
-      store.onInput(true);
-      alertSameName.value = '';
-    } else {
-      store.onInput(false);
-    }
-  });
+  }, { detached: true });
 
   watch(editModal, newState => {
     if (newState === true){
       alertSameName.value = '';
       store.onInput(true);
     } else {
+      alertSameName.value = '';
       store.onInput(false);
     }
-  })
+  });
   
   // Подсветка выбранного ключа
 
@@ -167,8 +166,11 @@
 .alert-same-name
   margin-left: 16px
   color: red
+  line-height: 3
   @media screen and (max-width: 560px)
     display: block
     margin-left: 0
     margin-bottom: 16px
+.modal
+  background-color: #babdc8
 </style>
