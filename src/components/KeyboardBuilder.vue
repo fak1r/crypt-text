@@ -64,7 +64,7 @@
           </td>
         </tr>
       </table>
-
+      <q-btn class="btn q-mt-md" @click="randomizeKey" no-caps>{{ store.lang.randomizeKey }}</q-btn>
     </div>
   </div>
 </template>
@@ -215,6 +215,27 @@
       }
     }   
   }
+
+  // Получение уникального ключа
+
+  const randomizeKey = () => {
+    const symbolsArray = Object.values(symbols.value);
+    const keyboardKeys = Object.keys(encryptKeyboard.value);
+
+    const shuffledSymbols = [...symbolsArray];
+
+    // Реализуем алгоритм Фишера-Йейтса для перемешивания массива
+    for (let i = shuffledSymbols.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffledSymbols[i], shuffledSymbols[j]] = [shuffledSymbols[j], shuffledSymbols[i]];
+    }
+
+    // Заполняем кнопки случайными символами
+    for (let i = 0; i < keyboardKeys.length; i++) {
+      encryptKeyboard.value[keyboardKeys[i]] = shuffledSymbols[i];
+    }
+  }
+
 </script>
 
 <style lang="sass">

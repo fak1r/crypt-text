@@ -1,5 +1,5 @@
 <template>
-  <div class="fullscreen bg-blue text-white text-center q-pa-md flex flex-center">
+  <div class="fullscreen bg-deep-purple-5 text-white text-center q-pa-md flex flex-center">
     <div>
       <div style="font-size: 30vh">
         404
@@ -12,7 +12,7 @@
       <q-btn
         class="q-mt-xl"
         color="white"
-        text-color="blue"
+        text-color="deep-purple-5"
         unelevated
         to="/"
         label="Go Home"
@@ -22,10 +22,12 @@
   </div>
 </template>
 
-<script>
-import { defineComponent } from 'vue'
+<script setup>
 
-export default defineComponent({
-  name: 'ErrorNotFound'
-})
+  import { defineComponent } from 'vue'
+
+  defineComponent({
+    name: 'ErrorNotFound'
+  })
+  
 </script>

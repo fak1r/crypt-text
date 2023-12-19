@@ -27,6 +27,7 @@ export default {
   btnSaveKey: 'Создать новый ключ',
   placeholderNewKeyboard: 'Название клавиатуры',
   emptyKey: 'Не выбрана',
+  randomizeKey: 'Перемешать ключ',
 
   //LangLayoutSelector.vue
   langSelectorLable: 'Выбранный ключ',

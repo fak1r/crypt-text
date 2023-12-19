@@ -27,6 +27,7 @@ export default {
   btnSaveKey: 'Create new key',
   placeholderNewKeyboard: 'Keyboard name',
   emptyKey: 'Not selected',
+  randomizeKey: 'Randomize key',
 
   // LangLayoutSelector.vue
   langSelectorLable: 'Current key',
