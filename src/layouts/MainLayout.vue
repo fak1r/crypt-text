@@ -44,7 +44,7 @@
         <q-item-label
           header
         >
-          Menu
+          {{ store.lang.menuTitle }}
         </q-item-label>
         <q-list>
           <menu-links
@@ -67,7 +67,7 @@
       <q-item-label
         header
       >
-        Key
+        {{ store.lang.menuKey }}
       </q-item-label>
       <div class="keyboard-textarea">
         <keyboard-textarea></keyboard-textarea>
@@ -100,27 +100,29 @@
   const toggleRightDrawer = () => {
     rightDrawerOpen.value = !rightDrawerOpen.value
   }
-  const dialog = ref(false)
-  const position = ref('top')
-
-  const open = (pos) => {
-    position.value = pos
-    dialog.value = true
-  };
 
   const linksList = [
     {
-      title: 'Login / Registration',
+      titleEng: 'Main page',
+      titleRus: 'Главная страница',
+      icon: 'home',
+      link: '/'
+    },
+    {
+      titleEng: 'Login / Registration',
+      titleRus: 'Вход / Регистрация',
       icon: 'login',
-      link: '/'
+      link: '/auth'
     },
     {
-      title: 'Logout',
+      titleEng: 'Logout',
+      titleRus: 'Выход',
       icon: 'logout',
-      link: '/'
+      link: '/logout'
     },
     {
-      title: 'Github',
+      titleEng: 'Github',
+      titleRus: 'Гитхаб',
       caption: 'github.com/fak1r/crypt-text',
       icon: 'code',
       link: 'https://github.com/fak1r/crypt-text'
@@ -252,6 +254,8 @@ body
   &:disabled 
     background-color: #ccc 
     cursor: not-allowed
+.input
+  width: 100%
 .keyboard-textarea
   display: flex
   justify-content: center

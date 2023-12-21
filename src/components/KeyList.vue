@@ -40,7 +40,7 @@
         <div class="q-pt-md" ref="inputAddNewRef">
           <input-text
             v-model="createNewKeyName"
-            :placeholder="store.lang.placeholderNewKeyboard"
+            :label="store.lang.labelNewKeyboard"
           >   
             <template #buttons>
               <q-btn

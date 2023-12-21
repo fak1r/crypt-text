@@ -8,7 +8,7 @@
         <div class="encrypt">
           <input-text
             v-model="textToCrypt"
-            :placeholder="store.lang.placeholderCrypt"
+            :label="store.lang.labelCrypt"
             :eye-icon="true"
           >
             <template #buttons>
@@ -47,7 +47,7 @@
 
           <input-text
             v-model="textToDecrypt"
-            :placeholder="store.lang.placeholderDecrypt"
+            :label="store.lang.labelDecrypt"
             :eye-icon="true"
           >
             <template #buttons>

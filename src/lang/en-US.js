@@ -13,8 +13,8 @@ export default {
   copyTooltip: 'Done!',
   popupCryptTitle: 'Encrypted text',
   popupDecryptTitle: 'Decrypted text',
-  placeholderCrypt: 'Text to encrypt',
-  placeholderDecrypt: 'Secret code',
+  labelCrypt: 'Text to encrypt',
+  labelDecrypt: 'Secret code',
 
   // KeyboardBuilder.vue
   builderTitle: 'Encryption key builder',
@@ -25,7 +25,7 @@ export default {
   builderChooseNewSymbol: 'Choose symbol to add',
   builderChooseOldSymbol: 'Choose symbol to remove',
   btnSaveKey: 'Create new key',
-  placeholderNewKeyboard: 'Keyboard name',
+  labelNewKeyboard: 'Keyboard name',
   emptyKey: 'Not selected',
   randomizeKey: 'Randomize key',
 
@@ -38,5 +38,23 @@ export default {
   keyListText: 'You can add, remove and edit keys here. Duplicate key name is not allowed',
   repeatedKey: 'Duplicate key name is not allowed',
   deleteKeyNotice: 'Are you sure you want to delete the key?',
-  editKeyNotice: 'New key name'
+  editKeyNotice: 'New key name',
+
+  // LoginRegister.vue
+  registerInfo: 'Registered users can save keys in their account.',
+  loginInfo: 'Log in to view your saved keys.',
+  registerBtn: 'Registration',
+  loginBtn: 'Login',
+  registerEmailValidation: 'Enter a valid email address',
+  registerPassValidation: 'Password at least 6 characters long',
+  email: 'Email',
+  password: 'Password',
+
+  // AuthPage.vue
+  login: 'Login',
+  registration: 'Registration',
+
+  // MainLayout.vue
+  menuTitle: 'Menu',
+  menuKey: 'Key'
 }

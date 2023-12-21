@@ -142,12 +142,13 @@
   opacity: 0
   visibility: hidden
   transition: opacity .5s, visibility .5s
+  @media (hover: none) 
+    opacity: 1
+    visibility: visible
 .visible 
   opacity: 1
   visibility: visible
 .q-scroll-area
   padding: 0
   text-align: center
-.copy-tooltip
-  background-color: blue
 </style>

@@ -13,8 +13,8 @@ export default {
   copyTooltip: 'Успех!',
   popupCryptTitle: 'Зашифрованный текст',
   popupDecryptTitle: 'Дешифрованный текст',
-  placeholderCrypt: 'Текст для шифрования',
-  placeholderDecrypt: 'Секретный код',
+  labelCrypt: 'Текст для шифрования',
+  labelDecrypt: 'Секретный код',
 
   // KeyboardBuilder.vue
   builderTitle: 'Конструктор ключей шифрования',
@@ -25,7 +25,7 @@ export default {
   builderChooseNewSymbol: 'Выберите новый символ',
   builderChooseOldSymbol: 'Выберите символ для замены',
   btnSaveKey: 'Создать новый ключ',
-  placeholderNewKeyboard: 'Название клавиатуры',
+  labelNewKeyboard: 'Название клавиатуры',
   emptyKey: 'Не выбрана',
   randomizeKey: 'Перемешать ключ',
 
@@ -38,5 +38,23 @@ export default {
   keyListText: 'Здесь вы можете добавить, редактировать или удалить ключи. Нельзя указывать одинаковые имена ключей',
   repeatedKey: 'Нельзя указывать одинаковые имена ключей',
   deleteKeyNotice: 'Вы уверены что хотите удалить ключ?',
-  editKeyNotice: 'Новое имя ключа'
+  editKeyNotice: 'Новое имя ключа',
+
+  // LoginRegister.vue
+  registerInfo: 'Зарегистрированные пользователи могут сохранять ключи в своём аккаунте.',
+  loginInfo: 'Авторизуйтесь, чтобы просматривать сохранённые ключи.',
+  registerBtn: 'Регистрация',
+  loginBtn: 'Вход',
+  registerEmailValidation: 'Введите действительный Email',
+  registerPassValidation: 'Пароль длиной не менее 6 символов',
+  email: 'Email адрес',
+  password: 'Пароль',
+
+  // AuthPage.vue
+  login: 'Вход',
+  registration: 'Регистрация',
+
+  // MainLayout.vue
+  menuTitle: 'Меню',
+  menuKey: 'Ключ'
 }

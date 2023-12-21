@@ -1,26 +1,31 @@
 <template>
   <q-input
+    class="input"
     :model-value="modelValue"
     @update:model-value="newValue => $emit('update:modelValue', newValue)"
     color="deep-purple-5"
-    :placeholder="placeholder"
+    :label="label"
     outlined
     @keyup.esc="$emit('update:modelValue', '')"
     :type="isPwd ? 'password' : 'text'"
     ref="inputRef"
   >
     <template v-slot:append>
-      <q-icon name="close" @click="$emit('update:modelValue', '')" class="cursor-pointer" />
       <q-icon
         v-if="eyeIcon"
         :name="isPwd ? 'visibility_off' : 'visibility'"
         @click="isPwd = !isPwd"
-        class="cursor-pointer"
+        class="cursor-pointer input-icon"
+      />
+      <q-icon
+        @click="$emit('update:modelValue', '')"
+        class="cursor-pointer input-icon"
+        name="close"
       />
     </template>
   </q-input>
 
-  <div class="q-py-md flex">
+  <div class="q-mt-md flex">
     <slot name="buttons"></slot>
   </div>    
 
@@ -39,7 +44,7 @@
       type: String,
       required: false
     },
-    placeholder: {
+    label: {
       type: String,
       required: false,
       default: 'Введите что-нибудь'
@@ -69,3 +74,10 @@
   });
 
 </script>
+
+<style lang="sass">
+.input-icon
+  @media (hover: hover) 
+    &:hover
+      color: #8a8a8a
+</style>
