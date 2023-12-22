@@ -38,6 +38,7 @@
           </q-item>
         </q-list>
         <div class="q-pt-md" ref="inputAddNewRef">
+          <span v-if="alertSameName && !editModal" class="alert-same-name">{{ alertSameName }}</span>
           <input-text
             v-model="createNewKeyName"
             :label="store.lang.labelNewKeyboard"
@@ -49,7 +50,6 @@
                 no-caps
               >{{ store.lang.btnSaveKey }}
               </q-btn>
-              <span v-if="alertSameName && !editModal" class="alert-same-name">{{ alertSameName }}</span>
             </template>
           </input-text>
         </div>
@@ -167,6 +167,7 @@
   margin-left: 16px
   color: red
   line-height: 3
+  text-align: center
   @media screen and (max-width: 560px)
     display: block
     margin-left: 0
