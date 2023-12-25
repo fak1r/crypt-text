@@ -102,18 +102,18 @@
   const showCryptResult = ref(false);
   const showDecryptResult = ref(false);
 
-  const encryptKeyboard = ref(store.getKeyboardById(store.currentKeyboardId));
+  const encryptKeyboard = ref(store.getCurrentKey);
 
   // Обновление данных при изменении в state Pinia
 
   store.$subscribe(() => {   
-    encryptKeyboard.value = store.getKeyboardById(store.currentKeyboardId);
+    encryptKeyboard.value = store.getCurrentKey;
   }, { detached: true })
 
   // Шифрование 
 
   const cryptText = () => {
-    const text =  textToCrypt.value;
+    const text = textToCrypt.value;
     const textArray = text.split('');
     const cryptArray = [];
     textArray.forEach(el => cryptArray.push(encryptKeyboard.value[el]));

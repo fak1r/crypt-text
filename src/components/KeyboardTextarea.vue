@@ -45,7 +45,7 @@
 
   const store = useSymbolsStore();
 
-  let encryptKeyboard = ref(store.getKeyboardById(store.currentKeyboardId));
+  let encryptKeyboard = ref(store.getCurrentKey);
   let encryptKeyboardText = ref(JSON.stringify(encryptKeyboard.value, null, 2));
 
   // Копирование ключа
@@ -88,12 +88,12 @@
 
   store.$subscribe(() => {   
     if (store.currentKeyboardId !== null){
-      encryptKeyboard.value = store.getKeyboardById(store.currentKeyboardId);
+      encryptKeyboard.value = store.getCurrentKey;
       try {
         encryptKeyboardText.value = JSON.stringify(encryptKeyboard.value, null, 2);
       } 
       catch (error) {
-        console.log('KEY FORMAT ', error);
+        console.log('KEY:', encryptKeyboard.value, error);
       }
     } else {
       encryptKeyboardText.value = '';
@@ -103,11 +103,13 @@
   // Отслеживание изменений в textarea и обновление в store
 
   watch(encryptKeyboardText, (newText) => {
-    try {
-      store.updateKeyboard(JSON.parse(newText), store.currentKeyboardId);
-    } 
-    catch (error) {
-      console.log('KEY FORMAT ', error);
+    if (store.currentKeyboardId !== null){
+      try {
+        store.updateKeyboard(JSON.parse(newText));
+      } 
+      catch (error) {
+        console.log('KEY:', encryptKeyboard.value, error);
+      }
     }
   });
 

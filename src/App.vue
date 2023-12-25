@@ -2,10 +2,16 @@
   <router-view />
 </template>
 
-<script>
-import { defineComponent } from 'vue'
+<script setup>
 
-export default defineComponent({
-  name: 'App'
-})
+  import { defineComponent } from 'vue'
+  import { useSymbolsStore } from 'src/stores/symbolsStore'
+
+  const store = useSymbolsStore();
+  store.getKeys();
+
+  defineComponent({
+    name: 'App'
+  })
+  
 </script>

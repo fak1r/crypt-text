@@ -1,10 +1,13 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue';
+import { db } from '../firebase/firebase'
+import { collection, onSnapshot } from "firebase/firestore";
+
 
 export const useSymbolsStore = defineStore('symbolsStore', () => {
   // Data
   const keyboards = ref([
-    {
+/*     {
       id: 1,
       name: '(ENG) Public',
       symbols: {
@@ -31,9 +34,9 @@ export const useSymbolsStore = defineStore('symbolsStore', () => {
         '0': '♨', '1': '✡', '2': '✷', '3': '✥', '4': '▩', '5': '♜', '6': '♛', '7': '△', '8': '▤', '9': '▣', ' ': '%',
         ',': '⸘', '.': '¼', '!': '©', '?': '¶', ')': '~', '(': '÷', '-': '™',
       },
-    }
+    } */
   ]);
-  const currentKeyboardId = ref(1);
+  const currentKeyboardId = ref(null);
   const onInputFlag = ref(false);
   const lang = ref('en-US');
   const symbols = ref({
@@ -82,14 +85,12 @@ export const useSymbolsStore = defineStore('symbolsStore', () => {
     }
   });
 
-  const getKeyboardById = computed(() => {
-    return (id) => {
-      const key = keyboards.value.find(key => key.id === id);
-      if (key){
-        return key.symbols;
-      } else {
-        return ''
-      }
+  const getCurrentKey = computed(() => {
+    const key = keyboards.value.find(key => key.id === currentKeyboardId.value);
+    if (key){
+      return key.symbols;
+    } else {
+      return ''
     }
   });
 
@@ -113,6 +114,37 @@ export const useSymbolsStore = defineStore('symbolsStore', () => {
 
   // Actions
 
+  const getKeys = async () => {
+    // const querySnapshot = await getDocs(collection(db, "keys"));
+    // querySnapshot.forEach((doc) => {
+    //   // doc.data() is never undefined for query doc snapshots
+
+    //   let symbols = JSON.parse(doc.data().symbols);
+    //   let key = {
+    //     id: doc.id,
+    //     name: doc.data().name,
+    //     symbols 
+    //   }
+    //   keyboards.value.push(key);
+    // });
+    onSnapshot(collection(db, "keys"), (querySnapshot) => {
+      let keys = [];
+      querySnapshot.forEach((doc) => {
+        let symbols = JSON.parse(doc.data().symbols);
+        let key = {
+          id: doc.id,
+          name: doc.data().name,
+          symbols 
+        }
+        keys.push(key);
+      });
+      keyboards.value = keys;
+      if (!currentKeyboardId.value){
+        currentKeyboardId.value = String(keyboards.value.find(key => key === key).id);
+      }
+    });   
+  };
+
   const createNewKeyboard = (newKeyboardName) => {
     let id = 0;
     let newKeyboard = basicEngKeyboard;
@@ -130,8 +162,8 @@ export const useSymbolsStore = defineStore('symbolsStore', () => {
     currentKeyboardId.value = id;
   };
 
-  const updateKeyboard = (updatedKeyboard, keyboardId) => {
-    keyboards.value.find(key => key.id === keyboardId).symbols = updatedKeyboard;
+  const updateKeyboard = (updatedKeyboard) => {
+    keyboards.value.find(key => key.id === currentKeyboardId.value).symbols = updatedKeyboard;
   };
 
   const deleteKeyboard = (id) => {
@@ -157,7 +189,7 @@ export const useSymbolsStore = defineStore('symbolsStore', () => {
 
   return {
     keyboards, currentKeyboardId, onInputFlag, lang, symbols, 
-    getKeyboardByName, getKeyboardById, onInput, getKeyboardNames, getKeyboardIds,
-    createNewKeyboard, updateKeyboard, deleteKeyboard, editKeyboardName
+    getKeyboardByName, getCurrentKey, onInput, getKeyboardNames, getKeyboardIds,
+    getKeys, createNewKeyboard, updateKeyboard, deleteKeyboard, editKeyboardName
   }
 })

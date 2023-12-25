@@ -12,26 +12,15 @@
 </template>
 
 <script setup>
-  import { ref, onBeforeMount, watch } from 'vue'
+
+  import { ref, watch, onMounted } from 'vue'
   import { useSymbolsStore } from 'src/stores/symbolsStore';
 
   const store = useSymbolsStore();
 
-  // Выбор раскладки при первом входе
-
   const selectorKeyOptions = ref('');
 
-  onBeforeMount(() => {
-    if (store.lang.lang === 'Русский'){
-      selectorKeyOptions.value = '(RUS) Public'; 
-      store.currentKeyboardId = 2;
-    } else {
-      selectorKeyOptions.value = '(ENG) Public';
-      store.currentKeyboardId = 1;
-    }
-  })
-
-  // Изменение в Конструкторе ключей
+  // Изменение ключа по селектору
 
   watch(selectorKeyOptions, (newKey) => {
     if (newKey !== ''){
@@ -39,18 +28,25 @@
     }
   })
 
+  // Выбор ключа при первом входе
+
+  onMounted(() => {
+    if (!selectorKeyOptions.value && store.keyboards.length !== 0){
+      selectorKeyOptions.value = store.keyboards.find(el => el).name;
+    }
+  });
+
   // Изменение селектора при создании нового ключа
-  
+
   store.$subscribe(() => {   
     const newKeyId = store.currentKeyboardId;
-    if (newKeyId !== null) {
+    if (newKeyId !== null){
       const newKeyName = store.keyboards.find(key => key.id === newKeyId).name;
       selectorKeyOptions.value = newKeyName;
     } else {
       selectorKeyOptions.value = '';
     }
-
-  }, { detached: true })
+  }, { detached: true });
 
 </script>
 

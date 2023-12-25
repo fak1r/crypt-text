@@ -76,12 +76,12 @@
 
   const store = useSymbolsStore();
 
-  const encryptKeyboard = ref(store.getKeyboardById(store.currentKeyboardId));
+  const encryptKeyboard = ref(store.getCurrentKey);
 
   // Обновление данных при изменении в state Pinia
   
   store.$subscribe(() => {  
-    encryptKeyboard.value = store.getKeyboardById(store.currentKeyboardId);
+    encryptKeyboard.value = store.getCurrentKey;
   }, { detached: true })
 
   const symbols = ref(store.symbols);
