@@ -47,11 +47,7 @@
           {{ store.lang.menuTitle }}
         </q-item-label>
         <q-list>
-          <menu-links
-            v-for="link in linksList"
-            :key="link.title"
-            v-bind="link"
-          />
+          <menu-links />
         </q-list>
       </q-list>
     </q-drawer>
@@ -89,10 +85,10 @@
   import { useQuasar } from 'quasar'
   import languages from 'src/lang/index'
   import { useSymbolsStore } from 'src/stores/symbolsStore'
-
+  
   const store = useSymbolsStore();
   const leftDrawerOpen = ref(false);
-  const rightDrawerOpen = ref(false)
+  const rightDrawerOpen = ref(false);
 
   const toggleLeftDrawer = () => {
     leftDrawerOpen.value = !leftDrawerOpen.value
@@ -101,34 +97,6 @@
     rightDrawerOpen.value = !rightDrawerOpen.value
   }
 
-  const linksList = [
-    {
-      titleEng: 'Main page',
-      titleRus: 'Главная страница',
-      icon: 'home',
-      link: '/'
-    },
-    {
-      titleEng: 'Login / Registration',
-      titleRus: 'Вход / Регистрация',
-      icon: 'login',
-      link: '/auth'
-    },
-    {
-      titleEng: 'Logout',
-      titleRus: 'Выход',
-      icon: 'logout',
-      link: '/logout'
-    },
-    {
-      titleEng: 'Github',
-      titleRus: 'Гитхаб',
-      caption: 'github.com/fak1r/crypt-text',
-      icon: 'code',
-      link: 'https://github.com/fak1r/crypt-text'
-    }
-  ];
-
   // Переключение языка
   
   let lang = ref(languages['ru-RU']);
@@ -136,8 +104,8 @@
   const $q = useQuasar();
 
   if ($q.lang.getLocale() === 'en-US'){
-    lang.value = languages[['en-US']];
-  };
+    lang.value = languages['en-US'];
+  }
 
   store.lang = lang.value;
 

@@ -5,6 +5,13 @@
       <div class="q-py-md">
         {{ store.lang.builderText }}
       </div>
+      <q-linear-progress
+        class="q-mb-md"
+        color="primary"
+        size="20px"
+        indeterminate
+        v-if="!store.keysLoaded"
+      />
       <table>
         <tr>
           <td colspan="16">
@@ -64,7 +71,20 @@
           </td>
         </tr>
       </table>
-      <q-btn class="btn q-mt-md" @click="randomizeKey" no-caps>{{ store.lang.randomizeKey }}</q-btn>
+      <q-btn
+        @click="randomizeKey"
+        class="btn q-mt-md q-mr-md"
+        no-caps
+        :disable="!store.currentKeyboardId"
+      >{{ store.lang.randomizeKey }}</q-btn>
+      <q-btn
+        v-if="authStore.user.email"
+        @click="saveKeyOnServer"
+        class="btn q-mt-md"
+        no-caps
+        :disable="!store.currentKeyboardId"
+      >{{ store.lang.btnSaveOnServer }}
+      </q-btn>
     </div>
   </div>
 </template>
@@ -72,9 +92,11 @@
 <script setup>
 
   import { ref, onMounted } from 'vue';
-  import { useSymbolsStore } from 'src/stores/symbolsStore'
-
+  import { useSymbolsStore } from 'src/stores/symbolsStore';
+  import { useAuthStore } from 'src/stores/authStore';
+  
   const store = useSymbolsStore();
+  const authStore = useAuthStore();
 
   const encryptKeyboard = ref(store.getCurrentKey);
 
@@ -97,7 +119,7 @@
 
   const keyByValue = (symbol, keyboard) => {
     return Object.keys(keyboard).find(key => keyboard[key] === symbol);
-  }
+  };
 
   const chooseSymbolsToChange = (symbol, keyboard, clickOnSymbols = false) => {
     repeatedSymbol.value = false;
@@ -142,7 +164,7 @@
       repeatedSymbol.value = false;
       oldKey = '';
     }
-  }
+  };
 
   // Вывод в шаблон построчно
 
@@ -159,8 +181,8 @@
 
       resultArray[chunkIndex][key] = value;
       return resultArray;
-    }, []);
-  }
+    }, [])
+  };
 
   let symbolsInRow = ref(16);
   let containerWidth = 0;
@@ -168,17 +190,17 @@
   const symbolsInRowCounter = () => {
     // Высчитываем количество символов на строке, прибавляя 2 символа каждые 54px. Максимум 34, минимум 16.
     symbolsInRow.value = Math.min(34, 16 + Math.floor((Math.max(containerWidth, 450) - 450) / 54) * 2);
-  }
+  };
 
   onMounted(() => {
     containerWidth = document.querySelector('.parent-container').offsetWidth;
     symbolsInRowCounter();
-  })
+  });
 
   window.addEventListener('resize', () => {
     containerWidth = document.querySelector('.parent-container').offsetWidth;
     symbolsInRowCounter();
-  })
+  });
 
   // Отслеживание нажатий на клавиатуре, для быстрой замены символов
 
@@ -189,7 +211,7 @@
     if (!store.onInputFlag){
       changeCharactersByKeydown(encryptKeyboard.value, event);
     }
-  }) 
+  });
 
   const changeCharactersByKeydown = (keyboard, event) => {
     if (keyboard[event.key] && event.ctrlKey === false){
@@ -199,10 +221,12 @@
       symbolToRemove.value = keyboard[event.key];
       if (!clickOnChar) symbolToRemove.value = '';
     }
+
     if (event.key === 'Escape'){
       symbolToRemove.value = '';
       symbolToAdd.value = '';
     }
+
     if (symbolToAdd.value){
       const keyNew = keyByValue(symbolToRemove.value, keyboard);  
       if (keyNew){
@@ -213,8 +237,8 @@
         clickOnSymbol = false;
         repeatedSymbol.value = false;
       }
-    }   
-  }
+    }
+  };
 
   // Получение уникального ключа
 
@@ -234,8 +258,18 @@
     for (let i = 0; i < keyboardKeys.length; i++) {
       encryptKeyboard.value[keyboardKeys[i]] = shuffledSymbols[i];
     }
-  }
+  };
 
+  // Сохранение ключа на сервере
+
+  const saveKeyOnServer = () => {
+    if (authStore.user.email && store.getCurrentKey && store.currentKeyboardId){
+      store.saveKeyboardOnServer();
+      alert(store.lang.alertSaveOnServer);
+    } else {
+      alert('Please login');
+    }
+  };
 </script>
 
 <style lang="sass">

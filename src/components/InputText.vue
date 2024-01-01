@@ -7,8 +7,8 @@
     :label="label"
     outlined
     @keyup.esc="$emit('update:modelValue', '')"
+    @keyup.enter="$emit('enter-pressed')"
     :type="isPwd ? 'password' : 'text'"
-    ref="inputRef"
   >
     <template v-slot:append>
       <q-icon
@@ -34,7 +34,6 @@
 <script setup>
 
   import { ref, watch } from 'vue';
-  import { useFocusWithin } from '@vueuse/core';
   import { useSymbolsStore } from 'src/stores/symbolsStore';
 
   const store = useSymbolsStore();
@@ -56,22 +55,9 @@
     }
   });
 
-  const emit = defineEmits(['update:modelValue', 'is-pwd-update']);
+  const emit = defineEmits(['update:modelValue', 'is-pwd-update', 'enter-pressed']);
 
   const isPwd = ref(false);
-  
-  // Проверка фокуса на инпуте
-  
-  const inputRef = ref(null);
-  const { focused } = useFocusWithin(inputRef);
-
-  watch(focused, focused => {
-    if (focused) {
-      store.onInput(true);
-    } else {
-      store.onInput(false);
-    }
-  });
 
 </script>
 

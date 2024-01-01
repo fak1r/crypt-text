@@ -1,5 +1,10 @@
 export default {
   lang: 'Русский',
+
+  // MenuLinks.vue
+  mainPage: 'Главная страница',
+  loginRegistration: 'Вход / Регистрация',
+  logout: 'Выход',
   
   // CryptDecrypt.vue
   cryptTitle: 'Шифрование и дешифровка текста',
@@ -28,6 +33,7 @@ export default {
   labelNewKeyboard: 'Название клавиатуры',
   emptyKey: 'Не выбрана',
   randomizeKey: 'Перемешать ключ',
+  alertSaveOnServer: 'Ключ успешно сохранён на сервер',
 
   //LangLayoutSelector.vue
   langSelectorLable: 'Выбранный ключ',
@@ -39,6 +45,7 @@ export default {
   repeatedKey: 'Нельзя указывать одинаковые имена ключей',
   deleteKeyNotice: 'Вы уверены что хотите удалить ключ?',
   editKeyNotice: 'Новое имя ключа',
+  btnSaveOnServer: 'Сохранить ключ на сервер',
 
   // LoginRegister.vue
   registerInfo: 'Зарегистрированные пользователи могут сохранять ключи в своём аккаунте.',

@@ -40,8 +40,10 @@
 
   store.$subscribe(() => {   
     const newKeyId = store.currentKeyboardId;
-    if (newKeyId !== null){
-      const newKeyName = store.keyboards.find(key => key.id === newKeyId).name;
+    const newKey = store.keyboards.find(key => key.id === newKeyId);
+
+    if (newKeyId !== null && newKey){
+      const newKeyName = newKey.name;
       selectorKeyOptions.value = newKeyName;
     } else {
       selectorKeyOptions.value = '';

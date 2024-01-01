@@ -1,6 +1,11 @@
 export default {
   lang: 'English',
-  
+
+  // MenuLinks.vue
+  mainPage: 'Main page',
+  loginRegistration: 'Login / Registration',
+  logout: 'Logout',
+
   // CryptDecrypt.vue
   cryptTitle: 'Encryption and decryption text',
   cryptText: 'Be sure to enter text using the keys contained in the secret key.',
@@ -28,6 +33,7 @@ export default {
   labelNewKeyboard: 'Keyboard name',
   emptyKey: 'Not selected',
   randomizeKey: 'Randomize key',
+  alertSaveOnServer: 'The key was successfully saved to the server',
 
   // LangLayoutSelector.vue
   langSelectorLable: 'Current key',
@@ -39,6 +45,7 @@ export default {
   repeatedKey: 'Duplicate key name is not allowed',
   deleteKeyNotice: 'Are you sure you want to delete the key?',
   editKeyNotice: 'New key name',
+  btnSaveOnServer: 'Save key on server',
 
   // LoginRegister.vue
   registerInfo: 'Registered users can save keys in their account.',

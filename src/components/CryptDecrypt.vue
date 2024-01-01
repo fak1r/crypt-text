@@ -3,13 +3,16 @@
     <div class="child-container">
       <div class="h1 text-center q-pb-md">{{ store.lang.cryptTitle }}</div>
       <div class="q-pb-md">{{ store.lang.cryptText }}</div>
-      <keyboard-selector></keyboard-selector>
+      
+      <keyboard-selector v-if="authStore.user.email"></keyboard-selector>
+
       <div class="crypt-decrypt" ref="cryptedRef">
         <div class="encrypt">
           <input-text
             v-model="textToCrypt"
             :label="store.lang.labelCrypt"
             :eye-icon="true"
+            @enter-pressed="cryptText"
           >
             <template #buttons>
               <div class="q-pb-md q-pr-md">
@@ -44,11 +47,12 @@
         </div>
 
         <div class="decrypt">
-
+          
           <input-text
             v-model="textToDecrypt"
             :label="store.lang.labelDecrypt"
             :eye-icon="true"
+            @enter-pressed="decryptText"
           >
             <template #buttons>
               <div class="q-pr-md q-pb-md">
@@ -87,13 +91,16 @@
 
 <script setup>
 
-  import { ref } from 'vue';
+  import { ref, watch } from 'vue';
   import { useSymbolsStore } from 'src/stores/symbolsStore';
+  import { useAuthStore } from 'src/stores/authStore';
+  import { useFocusWithin } from '@vueuse/core';
   import KeyboardSelector from './KeyboardSelector.vue';
   import ModalDialog from './ModalDialog.vue';
   import InputText from './InputText.vue';
 
   const store = useSymbolsStore();
+  const authStore = useAuthStore();
 
   let textToCrypt = ref('');
   let textToDecrypt = ref('');
@@ -136,6 +143,19 @@
     decryptedText.value = result.join('');
     showDecryptResult.value = true;
   }
+
+  // Проверка фокуса на инпуте
+  
+  const cryptedRef = ref(null);
+  const { focused } = useFocusWithin(cryptedRef);
+
+  watch(focused, focused => {
+    if (focused){
+      store.onInputFlag = true;
+    } else {
+      store.onInputFlag = false;
+    }
+  });
 </script>
 
 <style lang="sass">

@@ -30,7 +30,7 @@
   import { ref } from 'vue';
 
   const store = useSymbolsStore();
-  const tab = ref('regis');
+  const tab = ref('login');
 
 </script>
 

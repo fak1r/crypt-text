@@ -42,11 +42,12 @@
           <input-text
             v-model="createNewKeyName"
             :label="store.lang.labelNewKeyboard"
+            @enter-pressed="createKeyboard"
           >   
             <template #buttons>
               <q-btn
                 @click="createKeyboard"
-                class="btn"
+                class="btn q-mr-md q-mb-md"
                 no-caps
               >{{ store.lang.btnSaveKey }}
               </q-btn>
@@ -62,7 +63,14 @@
 
             <q-card-actions align="right">
               <q-btn flat label="Cancel" text-color="black" v-close-popup />
-              <q-btn flat label="Delete" text-color="red" color="primary" @click="store.deleteKeyboard(keyIdToDelete)" v-close-popup />
+              <q-btn
+                v-close-popup
+                @click="deleteKeyFromServer()"
+                color="primary"
+                label="Delete"
+                text-color="red"
+                flat
+              />
             </q-card-actions>
           </q-card>
         </q-dialog>
@@ -95,9 +103,12 @@
 
   import { computed, ref, watch } from 'vue';
   import { useSymbolsStore } from 'src/stores/symbolsStore';
+  import { useAuthStore } from 'src/stores/authStore';
+  import { useFocusWithin } from '@vueuse/core';
   import InputText from './InputText.vue';
-
+  
   const store = useSymbolsStore();
+  const authStore = useAuthStore();
 
   const deleteModal = ref(false);
   const keyIdToDelete = ref(0);
@@ -114,18 +125,20 @@
     if (store.keyboards.find(key => key.name === createNewKeyName.value)){
       alertSameName.value = store.lang.repeatedKey;
     } else {
-      store.createNewKeyboard(createNewKeyName.value);
+      store.createNewKeyboardOnServer(createNewKeyName.value);
       alertSameName.value = '';
       createNewKeyName.value = '';
     }
   };
 
   const editKeyboardName = (keyIdToRename) => {
-    const sameNamedKey = store.keyboards.find(key => key.name === editedKeyName.value);
+    const newKeyName = editedKeyName.value.trim();
+    const sameNamedKey = store.keyboards.find(key => key.name === newKeyName);
+    
     if (sameNamedKey && sameNamedKey.id !== keyIdToRename){
       alertSameName.value = store.lang.repeatedKey;
     } else {
-      store.editKeyboardName(keyIdToRename, editedKeyName.value)
+      store.editKeyboardName(keyIdToRename, newKeyName)
       alertSameName.value = '';
       editModal.value = false;
     }
@@ -145,10 +158,10 @@
   watch(editModal, newState => {
     if (newState === true){
       alertSameName.value = '';
-      store.onInput(true);
+      store.onInputFlag = true;
     } else {
       alertSameName.value = '';
-      store.onInput(false);
+      store.onInputFlag = false;
     }
   });
   
@@ -160,18 +173,35 @@
     }
   });
 
+  // Удаление ключа с сервера
+
+  const deleteKeyFromServer = () => {
+    if (authStore.user.email){
+      store.deleteKeyboardFromServer(keyIdToDelete.value);
+    }
+  }
+
+  // Проверка фокуса на инпуте
+  
+  const inputAddNewRef = ref(null);
+  const { focused } = useFocusWithin(inputAddNewRef);
+
+  watch(focused, focused => {
+    if (focused){
+      store.onInputFlag = true;
+    } else {
+      store.onInputFlag = false;
+    }
+  });
 </script>
 
 <style lang="sass">
 .alert-same-name
-  margin-left: 16px
   color: red
   line-height: 3
   text-align: center
-  @media screen and (max-width: 560px)
-    display: block
-    margin-left: 0
-    margin-bottom: 16px
+  display: block
+  margin-bottom: 16px
 .modal
   background-color: #babdc8
 </style>

@@ -4,11 +4,14 @@
 
 <script setup>
 
-  import { defineComponent } from 'vue'
-  import { useSymbolsStore } from 'src/stores/symbolsStore'
+  import { defineComponent, onMounted } from 'vue'
+  import { useAuthStore } from 'src/stores/authStore';
 
-  const store = useSymbolsStore();
-  store.getKeys();
+  const authStore = useAuthStore();
+
+  onMounted(() => {
+    authStore.init();
+  })
 
   defineComponent({
     name: 'App'

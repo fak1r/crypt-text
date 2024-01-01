@@ -62,17 +62,19 @@
 <script setup>
 
   import { useSymbolsStore } from 'src/stores/symbolsStore';
+  import { useAuthStore } from 'src/stores/authStore';
   import { ref } from 'vue'; 
 
   const store = useSymbolsStore();
+  const authStore = useAuthStore();
 
   const props = defineProps({
     tab: {
       type: String,
       required: true,
-      default: 'regis'
+      default: 'login'
     },
-  })
+  });
 
   const email = ref('');
   const password = ref('');
@@ -85,12 +87,12 @@
     passwordRef.value.validate();
     if (!emailRef.value.hasError && !passwordRef.value.hasError){
       if (props.tab === 'login'){
-        console.log('login');
+        authStore.loginUser(email.value, password.value);
       } else {
-        console.log('register');
+        authStore.registerUser(email.value, password.value);
       }
     }
-  }
+  };
 
   const isValidEmailAdress = (email) => {
     return String(email)
@@ -98,7 +100,7 @@
       .match(
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       );
-  } 
+  };
 </script>
 
 <style lang="sass">

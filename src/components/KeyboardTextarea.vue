@@ -120,10 +120,10 @@
 
   watch(focused, focused => {
     if (focused) {
-      store.onInput(true);
+      store.onInputFlag = true;
     }
     else {
-      store.onInput(false);
+      store.onInputFlag = false;
     }
   })
 </script>

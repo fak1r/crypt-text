@@ -15,6 +15,13 @@ const routes = [
     ]
   },
   {
+    path: '/logout',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('components/Auth/Logout.vue') }
+    ]
+  },
+  {
     path: '/:catchAll(.*)*',
     component: () => import('pages/ErrorNotFound.vue')
   }
