@@ -1,8 +1,8 @@
 <template>
   <q-page class="flex flex-center" style="min-height: 0">
+    <key-list v-if="authStore.user.email" />
     <crypt-decrypt />
     <keyboard-builder />
-    <key-list v-if="authStore.user.email" />
   </q-page>
 </template>
 
@@ -12,7 +12,7 @@
   import KeyList from 'src/components/KeyList.vue';
   import CryptDecrypt from 'src/components/CryptDecrypt.vue';
   import { useAuthStore } from 'src/stores/authStore';
-  import { defineComponent } from 'vue'
+  import { defineComponent } from 'vue';
   
   const authStore = useAuthStore();
 
@@ -21,6 +21,3 @@
   });
 
 </script>
-
-<style lang="sass">
-</style>

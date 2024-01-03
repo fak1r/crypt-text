@@ -33,10 +33,7 @@
 
 <script setup>
 
-  import { ref, watch } from 'vue';
-  import { useSymbolsStore } from 'src/stores/symbolsStore';
-
-  const store = useSymbolsStore();
+  import { ref } from 'vue';
 
   const props = defineProps({
     modelValue: {
@@ -63,7 +60,7 @@
 
 <style lang="sass">
 .input-icon
-  @media (hover: hover) 
+  @media (hover: none) and (pointer: coarse)
     &:hover
       color: #8a8a8a
 </style>

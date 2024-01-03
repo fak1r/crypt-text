@@ -3,11 +3,16 @@
     <div class="child-container">
       <div class="h1 text-center q-pb-md">{{ store.lang.cryptTitle }}</div>
       <div class="q-pb-md">{{ store.lang.cryptText }}</div>
-      
-      <keyboard-selector v-if="authStore.user.email"></keyboard-selector>
-
+      <div class="q-mb-md">
+        <q-radio keep-color v-model="currentAction" val="crypt" color="orange">
+          {{ store.lang.btnCrypt }}
+        </q-radio>
+        <q-radio keep-color v-model="currentAction" val="decrypt" color="purple">
+          {{ store.lang.btnDecrypt }}
+        </q-radio>
+      </div>
       <div class="crypt-decrypt" ref="cryptedRef">
-        <div class="encrypt">
+        <div class="encrypt" v-if="currentAction === 'crypt'">
           <input-text
             v-model="textToCrypt"
             :label="store.lang.labelCrypt"
@@ -43,11 +48,9 @@
             :tooltip="'Crypt'"
             @clearText="cryptedText = ''"
           ></modal-dialog> 
-
         </div>
 
-        <div class="decrypt">
-          
+        <div class="decrypt" v-else>
           <input-text
             v-model="textToDecrypt"
             :label="store.lang.labelDecrypt"
@@ -82,7 +85,6 @@
             :text="decryptedText"
             @clear-text="decryptedText = ''"
           ></modal-dialog>
-
         </div>
       </div>
     </div>
@@ -93,14 +95,11 @@
 
   import { ref, watch } from 'vue';
   import { useSymbolsStore } from 'src/stores/symbolsStore';
-  import { useAuthStore } from 'src/stores/authStore';
   import { useFocusWithin } from '@vueuse/core';
-  import KeyboardSelector from './KeyboardSelector.vue';
   import ModalDialog from './ModalDialog.vue';
   import InputText from './InputText.vue';
 
   const store = useSymbolsStore();
-  const authStore = useAuthStore();
 
   let textToCrypt = ref('');
   let textToDecrypt = ref('');
@@ -108,6 +107,7 @@
   let decryptedText = ref('');
   const showCryptResult = ref(false);
   const showDecryptResult = ref(false);
+  const currentAction = ref('crypt');
 
   const encryptKeyboard = ref(store.getCurrentKey);
 
@@ -179,7 +179,7 @@
   outline: none
 .input-icon
   cursor: pointer
-  @media (hover: hover) 
+  @media (hover: none) and (pointer: coarse)
     &:hover
       color: #8a8a8a
   &:active

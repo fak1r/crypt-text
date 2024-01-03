@@ -6,8 +6,8 @@
       class="text-deep-purple-7 text-bold"
       indicator-color="purple"
     >
-      <q-tab name="login" icon="login">{{ store.lang.login }}</q-tab>
-      <q-tab name="regis" icon="app_registration">{{ store.lang.registration }}</q-tab>
+      <q-tab class="tab" name="login" icon="login">{{ store.lang.login }}</q-tab>
+      <q-tab class="tab" name="regis" icon="app_registration">{{ store.lang.registration }}</q-tab>
     </q-tabs>
 
     <q-tab-panels class="tabs q-mt-md" v-model="tab" animated>
@@ -38,4 +38,6 @@
 .tabs
   background-color: $primary-light
   border-radius: 10px
+.tab
+  width: 50%
 </style>

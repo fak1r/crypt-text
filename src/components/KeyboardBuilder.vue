@@ -12,7 +12,7 @@
         indeterminate
         v-if="!store.keysLoaded"
       />
-      <table>
+      <table ref="tableRef">
         <tr>
           <td colspan="16">
             <div class="h2">
@@ -76,7 +76,8 @@
         class="btn q-mt-md q-mr-md"
         no-caps
         :disable="!store.currentKeyboardId"
-      >{{ store.lang.randomizeKey }}</q-btn>
+      >{{ store.lang.randomizeKey }}
+      </q-btn>
       <q-btn
         v-if="authStore.user.email"
         @click="saveKeyOnServer"
@@ -94,6 +95,7 @@
   import { ref, onMounted } from 'vue';
   import { useSymbolsStore } from 'src/stores/symbolsStore';
   import { useAuthStore } from 'src/stores/authStore';
+  import { onClickOutside } from '@vueuse/core'
   
   const store = useSymbolsStore();
   const authStore = useAuthStore();
@@ -165,6 +167,19 @@
       oldKey = '';
     }
   };
+
+  // Если кликнули мимо клавиатуры
+
+  const tableRef = ref(null);
+  
+  onClickOutside(tableRef, event => {
+    symbolToRemove.value = '';
+    symbolToAdd.value = '';
+    repeatedSymbol.value = '';
+    oldKey = '';
+    clickOnChar = false;
+    clickOnSymbol = false;
+  });
 
   // Вывод в шаблон построчно
 

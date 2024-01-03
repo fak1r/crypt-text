@@ -12,7 +12,7 @@
             v-for="keyboard in store.keyboards"
             :key="keyboard.id"
           >
-            <q-item-section >
+            <q-item-section @click="store.currentKeyboardId = keyboard.id">
               <q-item-label>{{ keyboard.name }}</q-item-label>
             </q-item-section>
             <q-item-section side>
@@ -47,7 +47,7 @@
             <template #buttons>
               <q-btn
                 @click="createKeyboard"
-                class="btn q-mr-md q-mb-md"
+                class="btn q-mr-md"
                 no-caps
               >{{ store.lang.btnSaveKey }}
               </q-btn>

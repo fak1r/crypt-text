@@ -175,20 +175,20 @@ body
 .left-menu, .right-menu
   background-color: $primary-light
 .lang-icon
-  @media (hover: hover) 
+  @media (hover: none) and (pointer: coarse)
     &:hover
       color: $primary-light
   &:active
     color: #AAA
 .key-icon
   cursor: pointer
-  @media (hover: hover) 
+  @media (hover: none) and (pointer: coarse)
     &:hover
       fill: $primary-light
   &:active
     fill: #AAA
 .left-menu-btn
-  @media (hover: hover) 
+  @media (hover: none) and (pointer: coarse)
     &:hover
       color: $primary-light
   &:active
@@ -216,7 +216,7 @@ body
     padding: 4px 8px
   &:active 
     background-color: #d71b1b 
-  @media (hover: hover)
+    @media (hover: none) and (pointer: coarse)
     &:hover
       background-color: #d9376e 
   &:disabled 

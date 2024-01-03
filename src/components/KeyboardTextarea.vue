@@ -5,8 +5,8 @@
       :thumb-style="thumbStyle"
       :bar-style="barStyle"
       class="scroll"
-      @mouseover="copyBtn.classList.add('visible');"
-      @mouseleave="copyBtn.classList.remove('visible');"
+      @mouseover="textareaBtns.classList.add('visible')"
+      @mouseleave="textareaBtns.classList.remove('visible')"
     >
       <q-input
         v-model="encryptKeyboardText"
@@ -20,7 +20,7 @@
       >
       </q-input>
     </q-scroll-area>
-    <div class="copy-btn" @mouseover="copyBtn.classList.add('visible');">
+    <div class="textarea-btns" @mouseover="textareaBtns.classList.add('visible')">
       <q-icon @click="copy(encryptKeyboardText)" color="blue-6" size="30px" name="content_copy"></q-icon>
       <div>
         <q-tooltip
@@ -31,6 +31,9 @@
           self="bottom middle"
         >{{ store.lang.copyTooltip }}
         </q-tooltip>
+      </div>
+      <div class="q-mt-sm">
+        <q-icon @click="replaceKey" color="blue-6" size="30px" name="published_with_changes"></q-icon>
       </div>
     </div>
   </div>
@@ -51,10 +54,10 @@
   // Копирование ключа
   
   const { copy, copied } = useClipboard({ source: encryptKeyboardText });
-  let copyBtn = null;
+  let textareaBtns;
   
   onMounted(() => {
-    copyBtn = document.querySelector('.copy-btn');
+    textareaBtns = document.querySelector('.textarea-btns');
   })
 
   const showTooltip = ref(false);
@@ -65,7 +68,69 @@
     } else {
       showTooltip.value = false;
     }
-  })
+  });
+
+  // Замена ключа
+
+  const replaceKey = () => {
+    navigator.clipboard.readText()
+      .then(text => {
+        if (encryptKeyboardText.value !== text){
+          encryptKeyboardText.value = text;
+          updateKeyboard(text);
+        }
+      })
+      .catch(err => {
+        // Возможно, пользователь не дал разрешение на чтение данных из буфера обмена
+        alert('Something went wrong', err);
+      });
+  }
+
+  // Отслеживание изменений в textarea и обновление в store
+
+  const updateKeyboard = (newKey) => {
+    if (store.currentKeyboardId !== null){
+      try {
+        store.updateKeyboard(JSON.parse(newKey));
+      } 
+      catch (error) {
+        console.log('Update key in store error:', encryptKeyboard.value, error);
+      }
+    }
+  }
+
+  watch(encryptKeyboardText, (newText) => {
+    updateKeyboard(newText);
+  });
+
+  // Отслеживание изменений в store и обновление textarea
+
+  store.$subscribe(() => {   
+    if (store.currentKeyboardId !== null){
+      encryptKeyboard.value = store.getCurrentKey;
+      try {
+        encryptKeyboardText.value = JSON.stringify(encryptKeyboard.value, null, 2);
+      } 
+      catch (error) {
+        console.log('Update textarea error:', encryptKeyboard.value, error);
+      }
+    } else {
+      encryptKeyboardText.value = '';
+    }
+  }, { detached: true });
+
+  // Проверка фокуса
+
+  const textareaRef = ref(null);
+  const { focused } = useFocusWithin(textareaRef);
+
+  watch(focused, focused => {
+    if (focused) {
+      store.onInputFlag = true;
+    } else {
+      store.onInputFlag = false;
+    }
+  });
 
   // Стили скролла
 
@@ -83,49 +148,6 @@
     width: '9px',
     opacity: 0.2
   };
-
-  // Отслеживание изменений в store и обновление textarea
-
-  store.$subscribe(() => {   
-    if (store.currentKeyboardId !== null){
-      encryptKeyboard.value = store.getCurrentKey;
-      try {
-        encryptKeyboardText.value = JSON.stringify(encryptKeyboard.value, null, 2);
-      } 
-      catch (error) {
-        console.log('KEY:', encryptKeyboard.value, error);
-      }
-    } else {
-      encryptKeyboardText.value = '';
-    }
-  }, { detached: true })
-
-  // Отслеживание изменений в textarea и обновление в store
-
-  watch(encryptKeyboardText, (newText) => {
-    if (store.currentKeyboardId !== null){
-      try {
-        store.updateKeyboard(JSON.parse(newText));
-      } 
-      catch (error) {
-        console.log('KEY:', encryptKeyboard.value, error);
-      }
-    }
-  });
-
-  // Проверка фокуса
-
-  const textareaRef = ref(null);
-  const { focused } = useFocusWithin(textareaRef);
-
-  watch(focused, focused => {
-    if (focused) {
-      store.onInputFlag = true;
-    }
-    else {
-      store.onInputFlag = false;
-    }
-  })
 </script>
 
 
@@ -135,7 +157,7 @@
   font-size: 24px
   padding: 0
   text-align: center
-.copy-btn
+.textarea-btns
   position: absolute
   top: 60px
   left: 22px
@@ -144,7 +166,10 @@
   opacity: 0
   visibility: hidden
   transition: opacity .5s, visibility .5s
-  @media (hover: none) 
+  @media screen and (max-width: 900px)
+    opacity: 1
+    visibility: visible
+  @media (hover: none) and (pointer: coarse)
     opacity: 1
     visibility: visible
 .visible 
