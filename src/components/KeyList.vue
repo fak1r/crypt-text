@@ -138,7 +138,7 @@
     if (sameNamedKey && sameNamedKey.id !== keyIdToRename){
       alertSameName.value = store.lang.repeatedKey;
     } else {
-      store.editKeyboardName(keyIdToRename, newKeyName)
+      store.editKeyboardName(keyIdToRename, newKeyName);
       alertSameName.value = '';
       editModal.value = false;
     }
@@ -169,8 +169,8 @@
 
   const currentKeyStyle = computed(() => {
     return (keyboard) => {
-      return keyboard.id === store.currentKeyboardId ? 'bg-green-2' : 'bg-orange-2'
-    }
+      return keyboard.id === store.currentKeyboardId ? 'bg-green-2' : 'bg-orange-2';
+    };
   });
 
   // Удаление ключа с сервера
@@ -179,7 +179,7 @@
     if (authStore.user.email){
       store.deleteKeyboardFromServer(keyIdToDelete.value);
     }
-  }
+  };
 
   // Проверка фокуса на инпуте
   

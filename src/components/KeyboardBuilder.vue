@@ -95,7 +95,7 @@
   import { ref, onMounted } from 'vue';
   import { useSymbolsStore } from 'src/stores/symbolsStore';
   import { useAuthStore } from 'src/stores/authStore';
-  import { onClickOutside } from '@vueuse/core'
+  import { onClickOutside } from '@vueuse/core';
   
   const store = useSymbolsStore();
   const authStore = useAuthStore();
@@ -106,7 +106,7 @@
   
   store.$subscribe(() => {  
     encryptKeyboard.value = store.getCurrentKey;
-  }, { detached: true })
+  }, { detached: true });
 
   const symbols = ref(store.symbols);
 
@@ -172,7 +172,7 @@
 
   const tableRef = ref(null);
   
-  onClickOutside(tableRef, event => {
+  onClickOutside(tableRef, () => {
     symbolToRemove.value = '';
     symbolToAdd.value = '';
     repeatedSymbol.value = '';
@@ -196,7 +196,7 @@
 
       resultArray[chunkIndex][key] = value;
       return resultArray;
-    }, [])
+    }, []);
   };
 
   let symbolsInRow = ref(16);

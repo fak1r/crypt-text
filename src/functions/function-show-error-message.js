@@ -1,4 +1,4 @@
-import { Dialog, Loading } from 'quasar'
+import { Dialog, Loading } from 'quasar';
 import { useSymbolsStore } from 'src/stores/symbolsStore';
 
 export function showErrorMessage(errorMessage){
@@ -9,15 +9,15 @@ export function showErrorMessage(errorMessage){
 
   if (store.lang.lang === 'Русский'){
     title = 'Ошибка';
-    if (errorMessage === "Firebase: Error (auth/invalid-credential)."){
-      errorText = 'Некорректный Email или пароль'
+    if (errorMessage === 'Firebase: Error (auth/invalid-credential).'){
+      errorText = 'Некорректный Email или пароль';
     } else {
       errorText = errorMessage;
     }
   } else {
     title = 'Error';
-    if (errorMessage === "Firebase: Error (auth/invalid-credential)."){
-      errorText = 'Incorrect Email or password'
+    if (errorMessage === 'Firebase: Error (auth/invalid-credential).'){
+      errorText = 'Incorrect Email or password';
     } else {
       errorText = errorMessage;
     }
@@ -26,5 +26,5 @@ export function showErrorMessage(errorMessage){
   Dialog.create({ 
     title: title,
     message: errorText
-  })
+  });
 }

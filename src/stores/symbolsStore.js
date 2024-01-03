@@ -1,8 +1,8 @@
-import { defineStore } from 'pinia'
+import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
-import { db } from '../firebase/firebase'
-import { collection, onSnapshot, doc, setDoc, deleteDoc, updateDoc } from "firebase/firestore";
-import { useAuthStore } from './authStore'
+import { db } from '../firebase/firebase';
+import { collection, onSnapshot, doc, setDoc, deleteDoc, updateDoc } from 'firebase/firestore';
+import { useAuthStore } from './authStore';
 
 let keysCollection;
 let getKeysSnapshot = null;
@@ -68,9 +68,9 @@ export const useSymbolsStore = defineStore('symbolsStore', () => {
       if (key){
         return key;
       } else {
-        return ''
+        return '';
       }
-    }
+    };
   });
 
   const getCurrentKey = computed(() => {
@@ -78,7 +78,7 @@ export const useSymbolsStore = defineStore('symbolsStore', () => {
     if (key){
       return key.symbols;
     } else {
-      return ''
+      return '';
     }
   });
 
@@ -102,7 +102,7 @@ export const useSymbolsStore = defineStore('symbolsStore', () => {
 
   const init = () => {
     const authStore = useAuthStore();
-    keysCollection = collection(db, "users", authStore.user.id, "keys");
+    keysCollection = collection(db, 'users', authStore.user.id, 'keys');
     getKeys();
   };
 
@@ -122,7 +122,7 @@ export const useSymbolsStore = defineStore('symbolsStore', () => {
           id: doc.id,
           name: doc.data().name,
           symbols 
-        }
+        };
         keys.push(key);
       });
 
@@ -216,5 +216,5 @@ export const useSymbolsStore = defineStore('symbolsStore', () => {
     getKeyboardByName, getCurrentKey, getKeyboardNames, getKeyboardIds,
     init, getKeys, createNewKeyboardOnServer, updateKeyboard, editKeyboardName, 
     saveKeyboardOnServer, deleteKeyboardFromServer, clearKeys
-  }
-})
+  };
+});

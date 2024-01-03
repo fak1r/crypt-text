@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-mutating-props -->
 <template>
   <q-dialog persistent v-model="props.modelValue" >
     <q-card ref="clickOutsideRef" class="secret-answer">
@@ -70,14 +71,14 @@
       type: String,
       default: ''
     }
-  })
+  });
 
   const emit = defineEmits(['update:modelValue', 'clear-text']);
 
   // Скрытие при клике за окно
 
   const clickOutsideRef = ref(null);
-  onClickOutside(clickOutsideRef, event => emit('update:modelValue', false))
+  onClickOutside(clickOutsideRef, () => emit('update:modelValue', false));
 
   // Tooltip copied
 
@@ -90,7 +91,7 @@
     } else {
       showTooltip.value = false;
     }
-  })
+  });
 
 </script>
 

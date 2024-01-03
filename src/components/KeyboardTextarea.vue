@@ -58,7 +58,7 @@
   
   onMounted(() => {
     textareaBtns = document.querySelector('.textarea-btns');
-  })
+  });
 
   const showTooltip = ref(false);
 
@@ -84,7 +84,7 @@
         // Возможно, пользователь не дал разрешение на чтение данных из буфера обмена
         alert('Something went wrong', err);
       });
-  }
+  };
 
   // Отслеживание изменений в textarea и обновление в store
 
@@ -97,7 +97,7 @@
         console.log('Update key in store error:', encryptKeyboard.value, error);
       }
     }
-  }
+  };
 
   watch(encryptKeyboardText, (newText) => {
     updateKeyboard(newText);

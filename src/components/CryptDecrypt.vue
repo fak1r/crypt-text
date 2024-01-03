@@ -115,7 +115,7 @@
 
   store.$subscribe(() => {   
     encryptKeyboard.value = store.getCurrentKey;
-  }, { detached: true })
+  }, { detached: true });
 
   // Шифрование 
 
@@ -126,7 +126,7 @@
     textArray.forEach(el => cryptArray.push(encryptKeyboard.value[el]));
     cryptedText.value = cryptArray.join('');
     showCryptResult.value = true;
-  }
+  };
 
   // Дешифровка
 
@@ -136,13 +136,13 @@
     for (let i = 0; i <= decryptArray.length; i++){
       Object.keys(encryptKeyboard.value).find(key => {
         if (encryptKeyboard.value[key] === decryptArray[i]){
-          result.push(key)
+          result.push(key);
         }
       });
     }
     decryptedText.value = result.join('');
     showDecryptResult.value = true;
-  }
+  };
 
   // Проверка фокуса на инпуте
   

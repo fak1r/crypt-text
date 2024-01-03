@@ -1,10 +1,10 @@
-import { defineStore } from 'pinia'
+import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import { auth } from '../firebase/firebase'
+import { auth } from '../firebase/firebase';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, 
-  signOut, onAuthStateChanged  } from "firebase/auth";
-import { useSymbolsStore } from "./symbolsStore";
-import { useRouter } from 'vue-router'
+  signOut, onAuthStateChanged  } from 'firebase/auth';
+import { useSymbolsStore } from './symbolsStore';
+import { useRouter } from 'vue-router';
 import { LocalStorage, Loading } from 'quasar';
 import { showErrorMessage } from 'src/functions/function-show-error-message';
 
@@ -28,15 +28,14 @@ export const useAuthStore = defineStore('authStore', () => {
         symbolsStore.clearKeys();
       }
     });
-  }
+  };
 
   const registerUser = (email, password) => {
     Loading.show();
-    createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
+    createUserWithEmailAndPassword(auth, email, password).then(() => {
         // Signed up 
-        const user = userCredential.user;
         symbolsStore.currentKeyboardId = null;
-        LocalStorage.set('loggedIn', true)
+        LocalStorage.set('loggedIn', true);
         router.push('/');
         Loading.hide();
       }).catch((error) => {
@@ -46,11 +45,10 @@ export const useAuthStore = defineStore('authStore', () => {
 
   const loginUser = (email, password) => {  
     Loading.show();
-    signInWithEmailAndPassword(auth, email, password).then((userCredential) => {
+    signInWithEmailAndPassword(auth, email, password).then(() => {
         // Signed in 
-        const user = userCredential.user;
         symbolsStore.init();
-        LocalStorage.set('loggedIn', true)
+        LocalStorage.set('loggedIn', true);
         router.push('/');
         Loading.hide();
       }).catch((error) => {
@@ -59,12 +57,12 @@ export const useAuthStore = defineStore('authStore', () => {
   };
 
   const logoutUser = () => {
-    LocalStorage.set('loggedIn', false)
-    signOut(auth).then().catch((error) => { console.log(error.message) });
+    LocalStorage.set('loggedIn', false);
+    signOut(auth).then().catch((error) => { console.log(error.message); });
   };
 
   return {
     user,
     init, registerUser, loginUser, logoutUser
-  }
-})
+  };
+});

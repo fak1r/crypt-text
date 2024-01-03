@@ -35,7 +35,7 @@
 
   import { ref } from 'vue';
 
-  const props = defineProps({
+  defineProps({
     modelValue: {
       type: String,
       required: false
@@ -52,7 +52,7 @@
     }
   });
 
-  const emit = defineEmits(['update:modelValue', 'is-pwd-update', 'enter-pressed']);
+  defineEmits(['update:modelValue', 'is-pwd-update', 'enter-pressed']);
 
   const isPwd = ref(false);
 

@@ -24,10 +24,10 @@
 
 <script setup>
 
-  import { defineComponent } from 'vue'
+  import { defineComponent } from 'vue';
 
   defineComponent({
     name: 'ErrorNotFound'
-  })
+  });
   
 </script>

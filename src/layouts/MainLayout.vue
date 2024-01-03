@@ -79,23 +79,23 @@
 
 <script setup>
   
-  import { ref, watch } from 'vue'
+  import { ref, watch } from 'vue';
   import KeyboardTextarea from 'src/components/KeyboardTextarea.vue';
   import MenuLinks from 'src/components/MenuLinks.vue';
-  import { useQuasar } from 'quasar'
-  import languages from 'src/lang/index'
-  import { useSymbolsStore } from 'src/stores/symbolsStore'
+  import { useQuasar } from 'quasar';
+  import languages from 'src/lang/index';
+  import { useSymbolsStore } from 'src/stores/symbolsStore';
   
   const store = useSymbolsStore();
   const leftDrawerOpen = ref(false);
   const rightDrawerOpen = ref(false);
 
   const toggleLeftDrawer = () => {
-    leftDrawerOpen.value = !leftDrawerOpen.value
-  }
+    leftDrawerOpen.value = !leftDrawerOpen.value;
+  };
   const toggleRightDrawer = () => {
-    rightDrawerOpen.value = !rightDrawerOpen.value
-  }
+    rightDrawerOpen.value = !rightDrawerOpen.value;
+  };
 
   // Переключение языка
   

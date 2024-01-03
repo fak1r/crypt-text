@@ -64,4 +64,4 @@ export default {
   // MainLayout.vue
   menuTitle: 'Меню',
   menuKey: 'Ключ'
-}
+};
