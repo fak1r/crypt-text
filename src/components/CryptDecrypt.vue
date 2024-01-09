@@ -1,16 +1,22 @@
 <template>
   <div class="parent-container q-pt-md">
     <div class="child-container">
-      <div class="h1 text-center q-pb-md">{{ store.lang.cryptTitle }}</div>
-      <div class="q-mb-md auth-alert" v-if="!authStore.user.email && showAuthWarning">
-        {{ store.lang.authAlert }}
-        <q-icon
-          @click="showAuthWarning = false"
-          class="close-icon"
-          name="close"
-          size="24px"
-        />
-      </div>
+      <h1 class="h1 text-center q-pb-md">{{ store.lang.cryptTitle }}</h1>
+      <transition
+        appear
+        enter-active-class="animated fadeIn"
+        leave-active-class="animated fadeOut"
+      >
+        <div class="q-mb-md auth-alert" v-if="!authStore.user.email && showAuthWarning">
+          {{ store.lang.authAlert }}
+          <q-icon
+            @click="showAuthWarning = false"
+            class="close-icon"
+            name="close"
+            size="24px"
+          />
+        </div>
+      </transition>
       <div class="q-pb-md">{{ store.lang.cryptText }}</div>
       <div class="q-mb-md">
         <q-radio keep-color v-model="currentAction" val="crypt" color="orange">
@@ -21,80 +27,93 @@
         </q-radio>
       </div>
       <div class="crypt-decrypt" ref="cryptedRef">
-        <div class="encrypt" v-if="currentAction === 'crypt'">
-          <input-text
-            v-model="textToCrypt"
-            :label="store.lang.labelCrypt"
-            :eye-icon="true"
-            @enter-pressed="cryptText"
+        <template v-if="currentAction === 'crypt'">
+          <transition
+            appear
+            enter-active-class="animated pulse"
           >
-            <template #buttons>
-              <div class="q-pb-md q-pr-md">
-                <q-btn
-                  @click="cryptText"
-                  class="btn"
-                  :disabled="!textToCrypt"
-                  no-caps
-                >{{ store.lang.btnCrypt }}
-                </q-btn>
-              </div>
-              <div class="q-pr-md q-pb-md">
-                <q-btn
-                  class="btn"
-                  :disabled="!cryptedText"
-                  @click="showCryptResult = true"
-                  no-caps
-                >{{ store.lang.btnShowResult }}
-                </q-btn>
-              </div>
-            </template>
-          </input-text>
-
-          <modal-dialog
-            v-model="showCryptResult"
-            :title="store.lang.popupCryptTitle"
-            :text="cryptedText"
-            :tooltip="'Crypt'"
-            @clearText="cryptedText = ''"
-          ></modal-dialog> 
-        </div>
-
-        <div class="decrypt" v-else>
-          <input-text
-            v-model="textToDecrypt"
-            :label="store.lang.labelDecrypt"
-            :eye-icon="true"
-            @enter-pressed="decryptText"
+            <div class="encrypt">
+                <input-text
+                  v-model="textToCrypt"
+                  :label="store.lang.labelCrypt"
+                  :eye-icon="true"
+                  @enter-pressed="cryptText"
+                >
+                  <template #buttons>
+                    <div class="q-pb-md q-pr-md">
+                      <q-btn
+                        @click="cryptText"
+                        class="btn"
+                        :disabled="!textToCrypt"
+                        no-caps
+                      >{{ store.lang.btnCrypt }}
+                      </q-btn>
+                    </div>
+                    <div class="q-pr-md q-pb-md">
+                      <q-btn
+                        class="btn"
+                        :disabled="!cryptedText"
+                        @click="showCryptResult = true"
+                        no-caps
+                      >{{ store.lang.btnShowResult }}
+                      </q-btn>
+                    </div>
+                  </template>
+                </input-text>
+              
+              <modal-dialog
+                v-model="showCryptResult"
+                :title="store.lang.popupCryptTitle"
+                :text="cryptedText"
+                :tooltip="'Crypt'"
+                @clearText="cryptedText = ''"
+              ></modal-dialog> 
+            </div>
+          </transition>
+        </template>
+        <template v-else>
+          <transition
+            appear
+            enter-active-class="animated pulse"
           >
-            <template #buttons>
-              <div class="q-pr-md q-pb-md">
-              <q-btn
-              @click="decryptText"
-              class="btn"
-              :disabled="!textToDecrypt"
-              no-caps
-              >{{ store.lang.btnDecrypt }}
-              </q-btn>
-            </div>
-            <div class="q-pr-md q-pb-md">
-              <q-btn
-                class="btn"
-                :disabled="!decryptedText"
-                @click="showDecryptResult = true"
-                no-caps
-              >{{ store.lang.btnShowResult }}
-              </q-btn>
-            </div>
-            </template>
-          </input-text>
+            <div class="decrypt">
+              <input-text
+                v-model="textToDecrypt"
+                :label="store.lang.labelDecrypt"
+                :eye-icon="true"
+                @enter-pressed="decryptText"
+              >
+                <template #buttons>
+                  <div class="q-pr-md q-pb-md">
+                  <q-btn
+                  @click="decryptText"
+                  class="btn"
+                  :disabled="!textToDecrypt"
+                  no-caps
+                  >{{ store.lang.btnDecrypt }}
+                  </q-btn>
+                </div>
+                <div class="q-pr-md q-pb-md">
+                  <q-btn
+                    class="btn"
+                    :disabled="!decryptedText"
+                    @click="showDecryptResult = true"
+                    no-caps
+                  >{{ store.lang.btnShowResult }}
+                  </q-btn>
+                </div>
+                </template>
+              </input-text>
 
-          <modal-dialog
-            v-model="showDecryptResult"
-            :title="store.lang.popupDecryptTitle"
-            :text="decryptedText"
-            @clear-text="decryptedText = ''"
-          ></modal-dialog>
-        </div>
+              <modal-dialog
+                v-model="showDecryptResult"
+                :title="store.lang.popupDecryptTitle"
+                :text="decryptedText"
+                @clear-text="decryptedText = ''"
+              ></modal-dialog>
+            </div>
+          </transition>
+        </template>
       </div>
     </div>
   </div>
@@ -207,4 +226,8 @@
   position: absolute
   right: 2px
   top: 2px
+h1 
+  padding: 0
+  margin: 0
+  line-height: 1.5
 </style>
