@@ -100,7 +100,8 @@ module.exports = configure(function (/* ctx */) {
       // Quasar plugins
       plugins: [
         'Dialog',
-        'Loading'
+        'Loading',
+        'Notify'
       ]
     },
 
@@ -204,5 +205,5 @@ module.exports = configure(function (/* ctx */) {
       // extendBexScriptsConf (esbuildConf) {}
       // extendBexManifestJson (json) {}
     }
-  }
+  };
 });

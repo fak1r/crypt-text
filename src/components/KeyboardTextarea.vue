@@ -94,7 +94,7 @@
         store.updateKeyboard(JSON.parse(newKey));
       } 
       catch (error) {
-        console.log('Update key in store error:', encryptKeyboard.value, error);
+        /* console.log('Update key in store error:', encryptKeyboard.value, error); */
       }
     }
   };
@@ -112,7 +112,7 @@
         encryptKeyboardText.value = JSON.stringify(encryptKeyboard.value, null, 2);
       } 
       catch (error) {
-        console.log('Update textarea error:', encryptKeyboard.value, error);
+        /* console.log('Update textarea error:', encryptKeyboard.value, error); */
       }
     } else {
       encryptKeyboardText.value = '';

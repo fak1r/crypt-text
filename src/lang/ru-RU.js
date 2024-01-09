@@ -20,6 +20,7 @@ export default {
   popupDecryptTitle: 'Дешифрованный текст',
   labelCrypt: 'Текст для шифрования',
   labelDecrypt: 'Секретный код',
+  authAlert: 'Авторизуйтесь, чтобы иметь возможность хранить ключи на сервере и попробовать весь функционал приложения. Регистрация не требует верификации Email, можно указать любой анонимный ящик',
 
   // KeyboardBuilder.vue
   builderTitle: 'Конструктор ключей шифрования',
@@ -33,7 +34,6 @@ export default {
   labelNewKeyboard: 'Название клавиатуры',
   emptyKey: 'Не выбрана',
   randomizeKey: 'Перемешать ключ',
-  alertSaveOnServer: 'Ключ успешно сохранён на сервер',
 
   //LangLayoutSelector.vue
   langSelectorLable: 'Выбранный ключ',
@@ -46,6 +46,7 @@ export default {
   deleteKeyNotice: 'Вы уверены что хотите удалить ключ?',
   editKeyNotice: 'Новое имя ключа',
   btnSaveOnServer: 'Сохранить ключ на сервер',
+  newKeyNameValidation: 'Введите уникальное имя ключа',
 
   // LoginRegister.vue
   registerInfo: 'Зарегистрированные пользователи могут сохранять ключи в своём аккаунте.',
@@ -63,5 +64,11 @@ export default {
 
   // MainLayout.vue
   menuTitle: 'Меню',
-  menuKey: 'Ключ'
+  menuKey: 'Ключ',
+
+  // symbolsStore.js
+  alertSaveOnServer: 'Ключ успешно сохранён на сервер',
+  alertDeleteFromServer: 'Ключ успешно удалён',
+  alertNameChanged: 'Имя ключа изменено'
+
 };

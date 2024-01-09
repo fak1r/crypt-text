@@ -2,6 +2,15 @@
   <div class="parent-container q-pt-md">
     <div class="child-container">
       <div class="h1 text-center q-pb-md">{{ store.lang.cryptTitle }}</div>
+      <div class="q-mb-md auth-alert" v-if="!authStore.user.email && showAuthWarning">
+        {{ store.lang.authAlert }}
+        <q-icon
+          @click="showAuthWarning = false"
+          class="close-icon"
+          name="close"
+          size="24px"
+        />
+      </div>
       <div class="q-pb-md">{{ store.lang.cryptText }}</div>
       <div class="q-mb-md">
         <q-radio keep-color v-model="currentAction" val="crypt" color="orange">
@@ -95,11 +104,13 @@
 
   import { ref, watch } from 'vue';
   import { useSymbolsStore } from 'src/stores/symbolsStore';
+  import { useAuthStore } from 'src/stores/authStore';
   import { useFocusWithin } from '@vueuse/core';
   import ModalDialog from './ModalDialog.vue';
   import InputText from './InputText.vue';
 
   const store = useSymbolsStore();
+  const authStore = useAuthStore();
 
   let textToCrypt = ref('');
   let textToDecrypt = ref('');
@@ -107,6 +118,7 @@
   let decryptedText = ref('');
   const showCryptResult = ref(false);
   const showDecryptResult = ref(false);
+  const showAuthWarning = ref(true);
   const currentAction = ref('crypt');
 
   const encryptKeyboard = ref(store.getCurrentKey);
@@ -184,4 +196,15 @@
       color: #8a8a8a
   &:active
     color: #8a8a8a
+.auth-alert
+  background-color: $warning
+  border-radius: 10px
+  padding: 20px
+  font-weight: bold
+  position: relative
+.close-icon
+  cursor: pointer
+  position: absolute
+  right: 2px
+  top: 2px
 </style>

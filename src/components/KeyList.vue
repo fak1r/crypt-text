@@ -38,21 +38,26 @@
           </q-item>
         </q-list>
         <div class="q-pt-md" ref="inputAddNewRef">
-          <span v-if="alertSameName && !editModal" class="alert-same-name">{{ alertSameName }}</span>
-          <input-text
+          <q-input
+            class="input"
             v-model="createNewKeyName"
+            color="deep-purple-5"
             :label="store.lang.labelNewKeyboard"
-            @enter-pressed="createKeyboard"
-          >   
-            <template #buttons>
-              <q-btn
-                @click="createKeyboard"
-                class="btn q-mr-md"
-                no-caps
-              >{{ store.lang.btnSaveKey }}
-              </q-btn>
-            </template>
-          </input-text>
+            outlined
+            ref="newKeyRef"
+            @keyup.esc="createNewKeyName = ''"
+            @keyup.enter="createKeyboard"
+            no-caps
+            :rules="[ val => isValidKeyName(val, createNewKeyName) || store.lang.newKeyNameValidation ]"
+            lazy-rules
+          />
+          <q-btn
+            @click="createKeyboard"
+            class="btn"
+            :class="alertMargin"
+            no-caps
+          >{{ store.lang.btnSaveKey }}
+          </q-btn>
         </div>
 
         <q-dialog v-model="deleteModal" persistent>
@@ -82,10 +87,15 @@
             </q-card-section>
 
             <q-card-section class="q-pt-none">
-              <q-input dense v-model="editedKeyName" autofocus @keyup.enter="editModal = false" />
+              <q-input
+                v-model="editedKeyName"
+                @keyup.enter="editModal = false"
+                dense
+                ref="editNameKeyRef"
+                :rules="[ val => isValidKeyName(val, editedKeyName) || store.lang.newKeyNameValidation ]"
+                lazy-rules
+              />
             </q-card-section>
-
-            <span v-if="alertSameName" class="alert-same-name">{{ alertSameName }}</span>
 
             <q-card-actions align="right" class="text-black">
               <q-btn flat label="Cancel" v-close-popup />
@@ -105,7 +115,6 @@
   import { useSymbolsStore } from 'src/stores/symbolsStore';
   import { useAuthStore } from 'src/stores/authStore';
   import { useFocusWithin } from '@vueuse/core';
-  import InputText from './InputText.vue';
   
   const store = useSymbolsStore();
   const authStore = useAuthStore();
@@ -116,54 +125,46 @@
   const keyIdToRename = ref(0);
   const editedKeyName = ref('');
 
-  // Сохранение новой клавиатуры в store
-
+  // Сохранение нового ключа в store
+  
   const createNewKeyName = ref('');
-  const alertSameName = ref('');
+  const newKeyRef = ref(null);
+  const alertMargin = ref('');
+
+  const isValidKeyName = (key, newName) => {
+    let notSameName = true;
+    if (!editModal.value) alertMargin.value = 'q-mt-md';
+    if (store.keyboards.find(key => key.name === newName.trim())){
+      notSameName = false;
+    }
+    return String(key).trim().match(/^.+/) && notSameName;
+  };
 
   const createKeyboard = () => {
-    if (store.keyboards.find(key => key.name === createNewKeyName.value)){
-      alertSameName.value = store.lang.repeatedKey;
-    } else {
-      store.createNewKeyboardOnServer(createNewKeyName.value);
-      alertSameName.value = '';
+    const newKeyName = createNewKeyName.value.trim();
+    newKeyRef.value.validate();
+    if (!newKeyRef.value.hasError){
+      store.createNewKeyboardOnServer(newKeyName);
       createNewKeyName.value = '';
+      newKeyRef.value.resetValidation();
+      alertMargin.value = '';
     }
   };
+
+  // Изменение имени ключа
+
+  const editNameKeyRef = ref(null);
 
   const editKeyboardName = (keyIdToRename) => {
     const newKeyName = editedKeyName.value.trim();
-    const sameNamedKey = store.keyboards.find(key => key.name === newKeyName);
-    
-    if (sameNamedKey && sameNamedKey.id !== keyIdToRename){
-      alertSameName.value = store.lang.repeatedKey;
-    } else {
+    editNameKeyRef.value.validate();
+
+    if (!editNameKeyRef.value.hasError){
       store.editKeyboardName(keyIdToRename, newKeyName);
-      alertSameName.value = '';
       editModal.value = false;
+      editNameKeyRef.value.resetValidation();
     }
   };
-
-  // Перевод алёрта на другой язык и скрытие при фокусе на инпут
-
-  store.$subscribe(() => {  
-    if (store.onInputFlag){
-      alertSameName.value = '';
-    } 
-    if (alertSameName.value !== ''){
-      alertSameName.value = store.lang.repeatedKey;
-    }
-  }, { detached: true });
-
-  watch(editModal, newState => {
-    if (newState === true){
-      alertSameName.value = '';
-      store.onInputFlag = true;
-    } else {
-      alertSameName.value = '';
-      store.onInputFlag = false;
-    }
-  });
   
   // Подсветка выбранного ключа
 
@@ -191,6 +192,17 @@
       store.onInputFlag = true;
     } else {
       store.onInputFlag = false;
+    }
+  });
+
+  // Проверка фокуса на модальном окне
+
+  watch(editModal, newState => {
+    if (newState === true){
+      store.onInputFlag = true;
+    } else {
+      store.onInputFlag = false;
+      alertMargin.value = '';
     }
   });
 </script>

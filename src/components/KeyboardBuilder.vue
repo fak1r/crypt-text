@@ -280,7 +280,6 @@
   const saveKeyOnServer = () => {
     if (authStore.user.email && store.getCurrentKey && store.currentKeyboardId){
       store.saveKeyboardOnServer();
-      alert(store.lang.alertSaveOnServer);
     } else {
       alert('Please login');
     }

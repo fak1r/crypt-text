@@ -1,5 +1,5 @@
 <template>
-    <q-item :to="'/'" tag="a" clickable>
+    <q-item to="/" tag="a" clickable>
       <q-item-section avatar>
         <q-icon name="home" />
       </q-item-section>
@@ -8,7 +8,7 @@
       </q-item-section>
     </q-item>
 
-    <q-item :to="'/auth'" tag="a" clickable v-if="!authStore.user.email">
+    <q-item to="/auth" tag="a" clickable v-if="!authStore.user.email">
       <q-item-section avatar>
         <q-icon name="login" />
       </q-item-section>
@@ -17,7 +17,7 @@
       </q-item-section>
     </q-item>
 
-    <q-item :to="'/logout'" tag="a" clickable v-else>
+    <q-item to="/logout" tag="a" clickable v-else>
       <q-item-section avatar>
         <q-icon name="logout" />
       </q-item-section>
@@ -27,7 +27,7 @@
       </q-item-section>
     </q-item>
 
-    <q-item :href="'https://github.com/fak1r/crypt-text'" tag="a" clickable>
+    <q-item href="https://github.com/fak1r/crypt-text" tag="a" clickable>
       <q-item-section avatar>
         <q-icon name="code" />
       </q-item-section>
