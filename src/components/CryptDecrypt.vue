@@ -182,7 +182,9 @@
 
   watch(focused, focused => {
     if (focused){
-      store.onInputFlag = true;
+      setTimeout(() => {
+        store.onInputFlag = true;
+      }, 0)
     } else {
       store.onInputFlag = false;
     }
