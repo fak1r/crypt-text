@@ -12,6 +12,20 @@
         indeterminate
         v-if="!store.keysLoaded"
       />
+      <div class="q-mb-md">
+        <q-checkbox keep-color v-model="numKeys" color="teal">
+          Num
+        </q-checkbox>
+        <q-checkbox keep-color v-model="engKeys"  color="orange">
+          Eng
+        </q-checkbox>
+        <q-checkbox keep-color v-model="rusKeys" color="red">
+          Rus
+        </q-checkbox>
+        <q-checkbox keep-color v-model="specKeys" color="cyan">
+          Spec
+        </q-checkbox>
+      </div>
       <table ref="tableRef">
         <tr>
           <td colspan="16">
@@ -29,7 +43,7 @@
           <td
             v-for="(value, key) in item"
             :key="key"
-            class="h2"
+            class="h2 symbol"
             @click="chooseSymbolsToChange(value, encryptKeyboard)"
             :class="{ yellow: symbolToRemove === value, pink: symbolToRemove !== value }"
           >
@@ -56,14 +70,14 @@
           </td>
         </tr>
         <tr
-          v-for="(item, index) in chunkedKeyValuePairs(symbols, symbolsInRow)"
+          v-for="(item, index) in chunkedKeyValuePairs(allSymbols, symbolsInRow)"
           :key="index"
           class="text-center"
         >
           <td
             v-for="(symbol, key) in item"
             :key="key"
-            class="h2"
+            class="h2 symbol"
             @click="chooseSymbolsToChange(symbol, encryptKeyboard, true)"
             :class="{ yellow: symbolToAdd === symbol, blue: symbolToAdd !== symbol }"
           >
@@ -92,7 +106,7 @@
 
 <script setup>
 
-  import { ref, onMounted } from 'vue';
+  import { ref, computed, onMounted } from 'vue';
   import { useSymbolsStore } from 'src/stores/symbolsStore';
   import { useAuthStore } from 'src/stores/authStore';
   import { onClickOutside } from '@vueuse/core';
@@ -108,7 +122,26 @@
     encryptKeyboard.value = store.getCurrentKey;
   }, { detached: true });
 
-  const symbols = ref(store.symbols);
+  // Формирования списка символов
+
+  const symbolsRus = ref(store.symbolsRus);
+  const symbolsEng = ref(store.symbolsEng);
+  const symbolsSpec = ref(store.symbolsSpec);
+  const symbolsNum = ref(store.symbolsNum);
+  
+  const rusKeys = ref(false);
+  const engKeys = ref(true);
+  const numKeys = ref(true);
+  const specKeys = ref(false);
+
+  const allSymbols = computed(() => {
+    let result = {};
+    if (rusKeys.value) result = { ...result, ...symbolsRus.value };
+    if (engKeys.value) result = { ...result, ...symbolsEng.value };
+    if (numKeys.value) result = { ...result, ...symbolsNum.value };
+    if (specKeys.value) result = { ...result, ...symbolsSpec.value };
+    return result;
+  });
 
   // Замена символов по клику
 
@@ -135,7 +168,7 @@
       symbolToRemove.value = symbol;
       if (!clickOnChar) symbolToRemove.value = '';
     } else {
-      if (symbol === symbols.value[symbolToAdd.value]) {
+      if (symbol === allSymbols.value[symbolToAdd.value]) {
         clickOnSymbol = !clickOnSymbol;
       } else {
         clickOnSymbol = true;
@@ -147,7 +180,7 @@
 
     // Проверка на наличие повторов
     if (clickOnSymbols && Object.values(keyboard).find(el => el === symbol) && 
-    Object.values(symbols.value).find(el => el === symbol)){
+    Object.values(allSymbols.value).find(el => el === symbol)){
       if (!clickOnChar || !clickOnSymbol) repeatedSymbol.value = false;
       if (clickOnChar || clickOnSymbol) repeatedSymbol.value = true;
      
@@ -258,7 +291,7 @@
   // Получение уникального ключа
 
   const randomizeKey = () => {
-    const symbolsArray = Object.values(symbols.value);
+    const symbolsArray = Object.values(allSymbols.value);
     const keyboardKeys = Object.keys(encryptKeyboard.value);
 
     const shuffledSymbols = [...symbolsArray];
@@ -269,9 +302,9 @@
       [shuffledSymbols[i], shuffledSymbols[j]] = [shuffledSymbols[j], shuffledSymbols[i]];
     }
 
-    // Заполняем кнопки случайными символами
+    // Заполняем кнопки случайными символами или символом * если не хватает символов
     for (let i = 0; i < keyboardKeys.length; i++) {
-      encryptKeyboard.value[keyboardKeys[i]] = shuffledSymbols[i];
+      encryptKeyboard.value[keyboardKeys[i]] = shuffledSymbols[i] || '*';
     }
   };
 
@@ -305,4 +338,6 @@
   text-align: right
 .keyboardSelector
   width: 200px
+.symbol
+  cursor: pointer
 </style>

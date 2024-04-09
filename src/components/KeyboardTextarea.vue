@@ -128,7 +128,7 @@
     if (focused) {
       setTimeout(() => {
         store.onInputFlag = true;
-      }, 0)
+      }, 0);
     } else {
       store.onInputFlag = false;
     }
