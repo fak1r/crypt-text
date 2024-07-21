@@ -1,1 +1,0 @@
-import{ae as o,aV as a,a4 as u,a5 as r}from"./index.a82bc2a6.js";const _={__name:"Logout",setup(s){const t=o(),e=a();return t.logoutUser(),e.push("/auth"),(c,n)=>(u(),r("div",null,"Logout page"))}};export{_ as default};
