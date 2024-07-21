@@ -8,8 +8,16 @@
 
       <q-separator />
 
-      <q-card-section style="max-height: 50vh" class="scroll">
-        <p class="h2">{{ text }}</p>
+      <q-card-section class="scroll">
+        <div class="result">
+          <span class="h2">{{ resultText }}</span>
+          <q-icon
+            :name="isVisible ? 'visibility_off' : 'visibility'"
+            class="cursor-pointer q-ml-sm"
+            @click="isVisible = !isVisible"
+            size="24px"
+          />
+        </div>
       </q-card-section>
 
       <q-separator />
@@ -46,7 +54,7 @@
 
 <script setup>
 
-  import { ref, watch } from 'vue';
+  import { computed, ref, watch } from 'vue';
 
   import { useSymbolsStore } from 'src/stores/symbolsStore';
   import { useClipboard, onClickOutside } from '@vueuse/core';
@@ -73,6 +81,8 @@
     }
   });
 
+  let isVisible = ref(true);
+
   const emit = defineEmits(['update:modelValue', 'clear-text']);
 
   // Скрытие при клике за окно
@@ -84,6 +94,11 @@
 
   const { copy, copied } = useClipboard({ source: props.text });
   const showTooltip = ref(false);
+
+  const visibleText = computed(() => props.text);
+  const hiddenText = computed(() => props.text.replace(/./g, '*'));
+
+  const resultText = computed(() => isVisible.value ? hiddenText.value : visibleText.value);
 
   watch(copied, copiedUpdate => {
     if (copiedUpdate){
@@ -98,4 +113,9 @@
 <style lang="sass">
 .secret-answer
   background-color: #babdc8
+.result
+  display: flex
+  align-items: center
+  justify-content: space-between
+  word-break: break-all 
 </style>
