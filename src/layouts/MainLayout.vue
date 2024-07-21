@@ -36,8 +36,7 @@
     <q-drawer
       v-model="leftDrawerOpen"
       side="left"
-      bordered
-      show-if-above
+      elevated
       class="left-menu"
     >
       <q-list>
@@ -55,8 +54,7 @@
     <q-drawer
       v-model="rightDrawerOpen"
       side="right"
-      bordered
-      show-if-above
+      elevated
       class="right-menu"
       :width="200"
     >

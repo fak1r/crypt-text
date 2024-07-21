@@ -26,6 +26,8 @@ export default {
   builderTitle: 'Конструктор ключей шифрования',
   builderText: 'Выберите клавишу и символ для замены. Повторные символы в клавиатуре запрещены, это нужно для корректной дешифровки.',
   builderKeyboard: 'Клавиатура:',
+  hideKey: 'Скрыть ключ',
+  showKey: 'Показать ключ',
   builderSymbols: 'Символы:',
   builderChooseWarning: 'Повторный символ',
   builderChooseNewSymbol: 'Выберите новый символ',

@@ -29,31 +29,43 @@
       <table ref="tableRef">
         <tr>
           <td colspan="16">
-            <div class="h2">
-              {{ store.lang.builderKeyboard }} 
-              <span class="h2" v-if="!encryptKeyboard">{{ store.lang.emptyKey }}</span>
-            </div>
-          </td>
-        </tr>
-        <tr
-          v-for="(item, index) in chunkedKeyValuePairs(encryptKeyboard, symbolsInRow)"
-          :key="index"
-          class="text-center"
-        >
-          <td
-            v-for="(value, key) in item"
-            :key="key"
-            class="h2 symbol"
-            @click="chooseSymbolsToChange(value, encryptKeyboard)"
-            :class="{ yellow: symbolToRemove === value, pink: symbolToRemove !== value }"
-          >
-            <div class="no-wrap">{{ key }}:</div>
-            <div class="no-wrap">{{ value }}</div> 
+            <span class="h2 table-title">{{ store.lang.builderKeyboard }} </span>
+            <span class="h2 table-title" v-if="!encryptKeyboard">{{ store.lang.emptyKey }}</span>
           </td>
         </tr>
         <tr>
-          <td colspan="4">
-            <div class="h2">{{ store.lang.builderSymbols }}</div>
+          <td colspan="30">
+            <div class="toggle-wrapper">
+              <q-toggle
+                color="primary"
+                :label="toggleKeyboardLabel"
+                keep-color
+                v-model="showKey"
+              />
+            </div>
+          </td>
+        </tr>
+        <template v-if="showKey">
+          <tr
+            v-for="(item, index) in chunkedKeyValuePairs(encryptKeyboard, symbolsInRow)"
+            :key="index"
+            class="text-center"
+          >
+            <td
+              v-for="(value, key) in item"
+              :key="key"
+              class="h2 symbol"
+              @click="chooseSymbolsToChange(value, encryptKeyboard)"
+              :class="{ yellow: symbolToRemove === value, pink: symbolToRemove !== value }"
+            >
+              <div class="no-wrap">{{ key }}:</div>
+              <div class="no-wrap">{{ value }}</div> 
+            </td>
+          </tr>
+        </template>
+        <tr>
+          <td colspan="16">
+            <div class="h2 table-title">{{ store.lang.builderSymbols }}</div>
           </td>
           <td colspan="30">
             <div class="alert">
@@ -141,6 +153,13 @@
     if (numKeys.value) result = { ...result, ...symbolsNum.value };
     if (specKeys.value) result = { ...result, ...symbolsSpec.value };
     return result;
+  });
+
+  // Скрытие/отображение клавиатуры
+
+  const showKey = ref(false);
+  const toggleKeyboardLabel = computed(() => {
+    return showKey.value ? store.lang.hideKey : store.lang.showKey;
   });
 
   // Замена символов по клику
@@ -340,4 +359,9 @@
   width: 200px
 .symbol
   cursor: pointer
+.toggle-wrapper
+  color: #67568C
+  font-weight: bold
+.table-title
+  font-size: 18px
 </style>

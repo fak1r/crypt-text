@@ -26,6 +26,8 @@ export default {
   builderTitle: 'Encryption key builder',
   builderText: 'Select the key and character to replace. Repeated characters are prohibited on the keyboard, this is necessary for correct decryption.',
   builderKeyboard: 'Keyboard:',
+  hideKey: 'Hide key',
+  showKey: 'Show key',
   builderSymbols: 'Symbols:',
   builderChooseWarning: 'Repeated symbol',
   builderChooseNewSymbol: 'Choose symbol to add',

@@ -54,7 +54,7 @@
 
   defineEmits(['update:modelValue', 'is-pwd-update', 'enter-pressed']);
 
-  const isPwd = ref(false);
+  const isPwd = ref(true);
 
 </script>
 

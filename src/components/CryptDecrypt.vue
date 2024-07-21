@@ -33,33 +33,33 @@
             enter-active-class="animated pulse"
           >
             <div class="encrypt">
-                <input-text
-                  v-model="textToCrypt"
-                  :label="store.lang.labelCrypt"
-                  :eye-icon="true"
-                  @enter-pressed="cryptText"
-                >
-                  <template #buttons>
-                    <div class="q-pb-md q-pr-md">
-                      <q-btn
-                        @click="cryptText"
-                        class="btn"
-                        :disabled="!textToCrypt"
-                        no-caps
-                      >{{ store.lang.btnCrypt }}
-                      </q-btn>
-                    </div>
-                    <div class="q-pr-md q-pb-md">
-                      <q-btn
-                        class="btn"
-                        :disabled="!cryptedText"
-                        @click="showCryptResult = true"
-                        no-caps
-                      >{{ store.lang.btnShowResult }}
-                      </q-btn>
-                    </div>
-                  </template>
-                </input-text>
+              <input-text
+                v-model="textToCrypt"
+                :label="store.lang.labelCrypt"
+                :eye-icon="true"
+                @enter-pressed="cryptText"
+              >
+                <template #buttons>
+                  <div class="q-pb-md q-pr-md">
+                    <q-btn
+                      @click="cryptText"
+                      class="btn"
+                      :disabled="!textToCrypt"
+                      no-caps
+                    >{{ store.lang.btnCrypt }}
+                    </q-btn>
+                  </div>
+                  <div class="q-pr-md q-pb-md">
+                    <q-btn
+                      class="btn"
+                      :disabled="!cryptedText"
+                      @click="showCryptResult = true"
+                      no-caps
+                    >{{ store.lang.btnShowResult }}
+                    </q-btn>
+                  </div>
+                </template>
+              </input-text>
               
               <modal-dialog
                 v-model="showCryptResult"
