@@ -6,12 +6,8 @@
         {{ store.lang.keyListText }}
       </div>
       <div class="q-pt-md">
-        <q-list separator bordered >
-          <q-item
-            :class="currentKeyStyle(keyboard)"
-            v-for="keyboard in store.keyboards"
-            :key="keyboard.id"
-          >
+        <q-list separator bordered>
+          <q-item :class="currentKeyStyle(keyboard)" v-for="keyboard in store.keyboards" :key="keyboard.id">
             <q-item-section @click="store.currentKeyboardId = keyboard.id">
               <q-item-label>{{ keyboard.name }}</q-item-label>
             </q-item-section>
@@ -23,7 +19,7 @@
                   flat
                   round
                   dense
-                  @click="keyIdToRename = keyboard.id, editModal = true, editedKeyName = keyboard.name"
+                  @click="(keyIdToRename = keyboard.id), (editModal = true), (editedKeyName = keyboard.name)"
                 />
                 <q-btn
                   color="red-5"
@@ -31,7 +27,7 @@
                   flat
                   round
                   dense
-                  @click="keyIdToDelete = keyboard.id, deleteModal = true"
+                  @click="(keyIdToDelete = keyboard.id), (deleteModal = true)"
                 />
               </div>
             </q-item-section>
@@ -48,16 +44,10 @@
             @keyup.esc="createNewKeyName = ''"
             @keyup.enter="createKeyboard"
             no-caps
-            :rules="[ val => isValidKeyName(val, createNewKeyName) || store.lang.newKeyNameValidation ]"
+            :rules="[(val) => isValidKeyName(val, createNewKeyName) || store.lang.newKeyNameValidation]"
             lazy-rules
           />
-          <q-btn
-            @click="createKeyboard"
-            class="btn"
-            :class="alertMargin"
-            no-caps
-          >{{ store.lang.btnSaveKey }}
-          </q-btn>
+          <q-btn @click="createKeyboard" class="btn" :class="alertMargin" no-caps>{{ store.lang.btnSaveKey }} </q-btn>
         </div>
 
         <q-dialog v-model="deleteModal" persistent>
@@ -92,16 +82,15 @@
                 @keyup.enter="editModal = false"
                 dense
                 ref="editNameKeyRef"
-                :rules="[ val => isValidKeyName(val, editedKeyName) || store.lang.newKeyNameValidation ]"
+                :rules="[(val) => isValidKeyName(val, editedKeyName) || store.lang.newKeyNameValidation]"
                 lazy-rules
               />
             </q-card-section>
 
             <q-card-actions align="right" class="text-black">
               <q-btn flat label="Cancel" v-close-popup />
-              <q-btn flat label="Save" @click="editKeyboardName(keyIdToRename)"/>
+              <q-btn flat label="Save" @click="editKeyboardName(keyIdToRename)" />
             </q-card-actions>
-
           </q-card>
         </q-dialog>
       </div>
@@ -110,103 +99,102 @@
 </template>
 
 <script setup>
+import { computed, ref, watch } from 'vue'
+import { useSymbolsStore } from 'src/stores/symbolsStore'
+import { useAuthStore } from 'src/stores/authStore'
+import { useFocusWithin } from '@vueuse/core'
 
-  import { computed, ref, watch } from 'vue';
-  import { useSymbolsStore } from 'src/stores/symbolsStore';
-  import { useAuthStore } from 'src/stores/authStore';
-  import { useFocusWithin } from '@vueuse/core';
-  
-  const store = useSymbolsStore();
-  const authStore = useAuthStore();
+const store = useSymbolsStore()
+const authStore = useAuthStore()
 
-  const deleteModal = ref(false);
-  const keyIdToDelete = ref(0);
-  const editModal = ref(false);
-  const keyIdToRename = ref(0);
-  const editedKeyName = ref('');
+const deleteModal = ref(false)
+const keyIdToDelete = ref(0)
+const editModal = ref(false)
+const keyIdToRename = ref(0)
+const editedKeyName = ref('')
 
-  // Сохранение нового ключа в store
-  
-  const createNewKeyName = ref('');
-  const newKeyRef = ref(null);
-  const alertMargin = ref('');
+// Сохранение нового ключа в store
 
-  const isValidKeyName = (key, newName) => {
-    let notSameName = true;
-    if (!editModal.value) alertMargin.value = 'q-mt-md';
-    if (store.keyboards.find(key => key.name === newName.trim())){
-      notSameName = false;
-    }
-    return String(key).trim().match(/^.+/) && notSameName;
-  };
+const createNewKeyName = ref('')
+const newKeyRef = ref(null)
+const alertMargin = ref('')
 
-  const createKeyboard = () => {
-    const newKeyName = createNewKeyName.value.trim();
-    newKeyRef.value.validate();
-    if (!newKeyRef.value.hasError){
-      store.createNewKeyboardOnServer(newKeyName);
-      createNewKeyName.value = '';
-      newKeyRef.value.resetValidation();
-      alertMargin.value = '';
-    }
-  };
+const isValidKeyName = (key, newName) => {
+  let notSameName = true
+  if (!editModal.value) alertMargin.value = 'q-mt-md'
+  if (store.keyboards.find((key) => key.name === newName.trim())) {
+    notSameName = false
+  }
+  return String(key).trim().match(/^.+/) && notSameName
+}
 
-  // Изменение имени ключа
+const createKeyboard = () => {
+  const newKeyName = createNewKeyName.value.trim()
+  newKeyRef.value.validate()
+  if (!newKeyRef.value.hasError) {
+    store.createNewKeyboardOnServer(newKeyName)
+    createNewKeyName.value = ''
+    newKeyRef.value.resetValidation()
+    alertMargin.value = ''
+  }
+}
 
-  const editNameKeyRef = ref(null);
+// Изменение имени ключа
 
-  const editKeyboardName = (keyIdToRename) => {
-    const newKeyName = editedKeyName.value.trim();
-    editNameKeyRef.value.validate();
+const editNameKeyRef = ref(null)
 
-    if (!editNameKeyRef.value.hasError){
-      store.editKeyboardName(keyIdToRename, newKeyName);
-      editModal.value = false;
-      editNameKeyRef.value.resetValidation();
-    }
-  };
-  
-  // Подсветка выбранного ключа
+const editKeyboardName = (keyIdToRename) => {
+  const newKeyName = editedKeyName.value.trim()
+  editNameKeyRef.value.validate()
 
-  const currentKeyStyle = computed(() => {
-    return (keyboard) => {
-      return keyboard.id === store.currentKeyboardId ? 'bg-green-2' : 'bg-orange-2';
-    };
-  });
+  if (!editNameKeyRef.value.hasError) {
+    store.editKeyboardName(keyIdToRename, newKeyName)
+    editModal.value = false
+    editNameKeyRef.value.resetValidation()
+  }
+}
 
-  // Удаление ключа с сервера
+// Подсветка выбранного ключа
 
-  const deleteKeyFromServer = () => {
-    if (authStore.user.email){
-      store.deleteKeyboardFromServer(keyIdToDelete.value);
-    }
-  };
+const currentKeyStyle = computed(() => {
+  return (keyboard) => {
+    return keyboard.id === store.currentKeyboardId ? 'bg-green-2' : 'bg-orange-2'
+  }
+})
 
-  // Проверка фокуса на инпуте
-  
-  const inputAddNewRef = ref(null);
-  const { focused } = useFocusWithin(inputAddNewRef);
+// Удаление ключа с сервера
 
-  watch(focused, focused => {
-    if (focused){
-      setTimeout(() => {
-        store.onInputFlag = true;
-      }, 0)
-    } else {
-      store.onInputFlag = false;
-    }
-  });
+const deleteKeyFromServer = () => {
+  if (authStore.user.email) {
+    store.deleteKeyboardFromServer(keyIdToDelete.value)
+  }
+}
 
-  // Проверка фокуса на модальном окне
+// Проверка фокуса на инпуте
 
-  watch(editModal, newState => {
-    if (newState === true){
-      store.onInputFlag = true;
-    } else {
-      store.onInputFlag = false;
-      alertMargin.value = '';
-    }
-  });
+const inputAddNewRef = ref(null)
+const { focused } = useFocusWithin(inputAddNewRef)
+
+watch(focused, (focused) => {
+  if (focused) {
+    setTimeout(() => {
+      store.onInputFlag = true
+    }, 0)
+  } else {
+    store.onInputFlag = false
+  }
+})
+
+// Проверка фокуса на модальном окне
+
+watch(editModal, (newState) => {
+  if (newState === true) {
+    store.onInputFlag = true
+  } else {
+    store.onInputFlag = false
+    alertMargin.value = ''
+  }
+})
 </script>
 
 <style lang="sass">

@@ -2,7 +2,7 @@
   <q-input
     class="input"
     :model-value="modelValue"
-    @update:model-value="newValue => $emit('update:modelValue', newValue)"
+    @update:model-value="(newValue) => $emit('update:modelValue', newValue)"
     color="deep-purple-5"
     :label="label"
     outlined
@@ -17,45 +17,38 @@
         @click="isPwd = !isPwd"
         class="cursor-pointer input-icon"
       />
-      <q-icon
-        @click="$emit('update:modelValue', '')"
-        class="cursor-pointer input-icon"
-        name="close"
-      />
+      <q-icon @click="$emit('update:modelValue', '')" class="cursor-pointer input-icon" name="close" />
     </template>
   </q-input>
 
   <div class="q-mt-md flex">
     <slot name="buttons"></slot>
-  </div>    
-
+  </div>
 </template>
 
 <script setup>
+import { ref } from 'vue'
 
-  import { ref } from 'vue';
+defineProps({
+  modelValue: {
+    type: String,
+    required: false,
+  },
+  label: {
+    type: String,
+    required: false,
+    default: 'Введите что-нибудь',
+  },
+  eyeIcon: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
+})
 
-  defineProps({
-    modelValue: {
-      type: String,
-      required: false
-    },
-    label: {
-      type: String,
-      required: false,
-      default: 'Введите что-нибудь'
-    },
-    eyeIcon: {
-      type: Boolean,
-      required: false,
-      default: false
-    }
-  });
+defineEmits(['update:modelValue', 'is-pwd-update', 'enter-pressed'])
 
-  defineEmits(['update:modelValue', 'is-pwd-update', 'enter-pressed']);
-
-  const isPwd = ref(true);
-
+const isPwd = ref(true)
 </script>
 
 <style lang="sass">

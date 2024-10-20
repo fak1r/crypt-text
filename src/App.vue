@@ -3,18 +3,16 @@
 </template>
 
 <script setup>
+import { defineComponent, onMounted } from 'vue'
+import { useAuthStore } from 'src/stores/authStore'
 
-  import { defineComponent, onMounted } from 'vue';
-  import { useAuthStore } from 'src/stores/authStore';
+const authStore = useAuthStore()
 
-  const authStore = useAuthStore();
+onMounted(() => {
+  authStore.init()
+})
 
-  onMounted(() => {
-    authStore.init();
-  });
-
-  defineComponent({
-    name: 'App'
-  });
-  
+defineComponent({
+  name: 'App',
+})
 </script>

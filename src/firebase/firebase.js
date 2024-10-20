@@ -1,6 +1,6 @@
-import { initializeApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
-import { getAuth } from 'firebase/auth';
+import { initializeApp } from 'firebase/app'
+import { getFirestore } from 'firebase/firestore'
+import { getAuth } from 'firebase/auth'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyC2mWbFrlRSGTkCilDTUcTszSLuOuwURFM',
@@ -8,14 +8,11 @@ const firebaseConfig = {
   projectId: 'cryptext-ee26b',
   storageBucket: 'cryptext-ee26b.appspot.com',
   messagingSenderId: '1072435393998',
-  appId: '1:1072435393998:web:d3122fa0b7d593b20c279f'
-};
+  appId: '1:1072435393998:web:d3122fa0b7d593b20c279f',
+}
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
+const app = initializeApp(firebaseConfig)
+const db = getFirestore(app)
+const auth = getAuth(app)
 
-export {
-  db,
-  auth
-};
+export { db, auth }

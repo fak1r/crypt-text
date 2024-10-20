@@ -7,17 +7,15 @@
 </template>
 
 <script setup>
+import KeyboardBuilder from 'src/components/KeyboardBuilder.vue'
+import KeyList from 'src/components/KeyList.vue'
+import CryptDecrypt from 'src/components/CryptDecrypt.vue'
+import { useAuthStore } from 'src/stores/authStore'
+import { defineComponent } from 'vue'
 
-  import KeyboardBuilder from 'src/components/KeyboardBuilder.vue';
-  import KeyList from 'src/components/KeyList.vue';
-  import CryptDecrypt from 'src/components/CryptDecrypt.vue';
-  import { useAuthStore } from 'src/stores/authStore';
-  import { defineComponent } from 'vue';
-  
-  const authStore = useAuthStore();
+const authStore = useAuthStore()
 
-  defineComponent({
-    name: 'IndexPage'
-  });
-
+defineComponent({
+  name: 'IndexPage',
+})
 </script>

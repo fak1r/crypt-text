@@ -1,7 +1,7 @@
 <template>
   <div style="max-width: 200px">
     <q-scroll-area
-      style="height: 600px; width: 170px;"
+      style="height: 600px; width: 170px"
       :thumb-style="thumbStyle"
       :bar-style="barStyle"
       class="scroll"
@@ -23,13 +23,8 @@
     <div class="textarea-btns" @mouseover="textareaBtns.classList.add('visible')">
       <q-icon @click="copy(encryptKeyboardText)" color="blue-6" size="30px" name="content_copy"></q-icon>
       <div>
-        <q-tooltip
-          class="bg-blue-6"
-          v-model="showTooltip"
-          :offset="[0, 45]"
-          anchor="top middle"
-          self="bottom middle"
-        >{{ store.lang.copyTooltip }}
+        <q-tooltip class="bg-blue-6" v-model="showTooltip" :offset="[0, 45]" anchor="top middle" self="bottom middle"
+          >{{ store.lang.copyTooltip }}
         </q-tooltip>
       </div>
       <div class="q-mt-sm">
@@ -37,121 +32,120 @@
       </div>
     </div>
   </div>
-
 </template>
 
 <script setup>
+import { ref, watch, onMounted } from 'vue'
+import { useSymbolsStore } from 'src/stores/symbolsStore'
+import { useFocusWithin, useClipboard } from '@vueuse/core'
 
-  import { ref, watch, onMounted } from 'vue';
-  import { useSymbolsStore } from 'src/stores/symbolsStore';
-  import { useFocusWithin, useClipboard } from '@vueuse/core';
+const store = useSymbolsStore()
 
-  const store = useSymbolsStore();
+let encryptKeyboard = ref(store.getCurrentKey)
+let encryptKeyboardText = ref(JSON.stringify(encryptKeyboard.value, null, 2))
 
-  let encryptKeyboard = ref(store.getCurrentKey);
-  let encryptKeyboardText = ref(JSON.stringify(encryptKeyboard.value, null, 2));
+// Копирование ключа
 
-  // Копирование ключа
-  
-  const { copy, copied } = useClipboard({ source: encryptKeyboardText });
-  let textareaBtns;
-  
-  onMounted(() => {
-    textareaBtns = document.querySelector('.textarea-btns');
-  });
+const { copy, copied } = useClipboard({ source: encryptKeyboardText })
+let textareaBtns
 
-  const showTooltip = ref(false);
+onMounted(() => {
+  textareaBtns = document.querySelector('.textarea-btns')
+})
 
-  watch(copied, copiedUpdate => {
-    if (copiedUpdate){
-      showTooltip.value = true;
-    } else {
-      showTooltip.value = false;
-    }
-  });
+const showTooltip = ref(false)
 
-  // Замена ключа
+watch(copied, (copiedUpdate) => {
+  if (copiedUpdate) {
+    showTooltip.value = true
+  } else {
+    showTooltip.value = false
+  }
+})
 
-  const replaceKey = () => {
-    navigator.clipboard.readText()
-      .then(text => {
-        if (encryptKeyboardText.value !== text){
-          encryptKeyboardText.value = text;
-          updateKeyboard(text);
-        }
-      })
-      .catch(err => {
-        // Возможно, пользователь не дал разрешение на чтение данных из буфера обмена
-        alert('Something went wrong', err);
-      });
-  };
+// Замена ключа
 
-  // Отслеживание изменений в textarea и обновление в store
-
-  const updateKeyboard = (newKey) => {
-    if (store.currentKeyboardId !== null){
-      try {
-        store.updateKeyboard(JSON.parse(newKey));
-      } 
-      catch (error) {
-        /* console.log('Update key in store error:', encryptKeyboard.value, error); */
+const replaceKey = () => {
+  navigator.clipboard
+    .readText()
+    .then((text) => {
+      if (encryptKeyboardText.value !== text) {
+        encryptKeyboardText.value = text
+        updateKeyboard(text)
       }
+    })
+    .catch((err) => {
+      // Возможно, пользователь не дал разрешение на чтение данных из буфера обмена
+      alert('Something went wrong', err)
+    })
+}
+
+// Отслеживание изменений в textarea и обновление в store
+
+const updateKeyboard = (newKey) => {
+  if (store.currentKeyboardId !== null) {
+    try {
+      store.updateKeyboard(JSON.parse(newKey))
+    } catch (error) {
+      /* console.log('Update key in store error:', encryptKeyboard.value, error); */
     }
-  };
+  }
+}
 
-  watch(encryptKeyboardText, (newText) => {
-    updateKeyboard(newText);
-  });
+watch(encryptKeyboardText, (newText) => {
+  updateKeyboard(newText)
+})
 
-  // Отслеживание изменений в store и обновление textarea
+// Отслеживание изменений в store и обновление textarea
 
-  store.$subscribe(() => {   
-    if (store.currentKeyboardId !== null){
-      encryptKeyboard.value = store.getCurrentKey;
+store.$subscribe(
+  () => {
+    if (store.currentKeyboardId !== null) {
+      encryptKeyboard.value = store.getCurrentKey
       try {
-        encryptKeyboardText.value = JSON.stringify(encryptKeyboard.value, null, 2);
-      } 
-      catch (error) {
+        encryptKeyboardText.value = JSON.stringify(encryptKeyboard.value, null, 2)
+      } catch (error) {
         /* console.log('Update textarea error:', encryptKeyboard.value, error); */
       }
     } else {
-      encryptKeyboardText.value = '';
+      encryptKeyboardText.value = ''
     }
-  }, { detached: true });
+  },
+  { detached: true },
+)
 
-  // Проверка фокуса
+// Проверка фокуса
 
-  const textareaRef = ref(null);
-  const { focused } = useFocusWithin(textareaRef);
+const textareaRef = ref(null)
+const { focused } = useFocusWithin(textareaRef)
 
-  watch(focused, focused => {
-    if (focused) {
-      setTimeout(() => {
-        store.onInputFlag = true;
-      }, 0);
-    } else {
-      store.onInputFlag = false;
-    }
-  });
+watch(focused, (focused) => {
+  if (focused) {
+    setTimeout(() => {
+      store.onInputFlag = true
+    }, 0)
+  } else {
+    store.onInputFlag = false
+  }
+})
 
-  // Стили скролла
+// Стили скролла
 
-  const thumbStyle = {
-    right: '4px',
-    borderRadius: '5px',
-    backgroundColor: '#67568c',
-    width: '5px',
-    opacity: 0.75
-  };
-  const barStyle = {
-    right: '2px',
-    borderRadius: '9px',
-    backgroundColor: '#67568c',
-    width: '9px',
-    opacity: 0.2
-  };
+const thumbStyle = {
+  right: '4px',
+  borderRadius: '5px',
+  backgroundColor: '#67568c',
+  width: '5px',
+  opacity: 0.75,
+}
+const barStyle = {
+  right: '2px',
+  borderRadius: '9px',
+  backgroundColor: '#67568c',
+  width: '9px',
+  opacity: 0.2,
+}
 </script>
-
 
 <style lang="sass">
 .q-textarea .q-field__native, .q-textarea .q-field__prefix, .q-textarea .q-field__suffix
@@ -174,7 +168,7 @@
   @media (hover: none) and (pointer: coarse)
     opacity: 1
     visibility: visible
-.visible 
+.visible
   opacity: 1
   visibility: visible
 .q-scroll-area
